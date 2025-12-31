@@ -1,0 +1,120 @@
+
+> phaser3-typescript-webpack@1.0.0 dev
+> npm run copy-css && webpack
+
+
+> phaser3-typescript-webpack@1.0.0 copy-css
+> node -e "require('fs').copyFileSync('node_modules/nes.css/css/nes.min.css', 'nes.min.css')"
+
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+
+Webpack is watching the files…
+
+Hash: c36be9023c1872e2fbf2
+Version: webpack 3.11.0
+Time: 3154ms
+               Asset     Size  Chunks                    Chunk Names
+           bundle.js   726 kB       0  [emitted]  [big]  app
+    vendor.bundle.js  5.08 MB       1  [emitted]  [big]  vendor
+       bundle.js.map   860 kB       0  [emitted]         app
+vendor.bundle.js.map  5.97 MB       1  [emitted]         vendor
+       ../index.html  1.39 kB          [emitted]         
+  [24] ./src/main.ts 5.98 kB {0} [built]
+  [35] ./src/services/auth-service.ts 16.6 kB {0} [built]
+ [131] ./src/services/websocket-service.ts 9.37 kB {0} [built]
+ [212] ./src/services/game-service.ts 12 kB {0} [built]
+ [213] ./src/objects/image-overlay.ts 8.3 kB {0} [built]
+ [215] (webpack)/buildin/global.js 509 bytes {1} [built]
+ [441] multi ./src/main.ts 28 bytes {0} [built]
+[1081] ./src/scenes/login-scene.ts 23.9 kB {0} [built]
+[1083] ./src/scenes/menu-scene.ts 33.5 kB {0} [built]
+[1084] ./src/scenes/game-create-scene.ts 34.8 kB {0} [built]
+[1086] ./src/scenes/qix-scene.ts 57 kB {0} [built]
+[1107] ./src/scenes/leaderboard-scene.ts 25.4 kB {0} [built]
+[1108] ./src/scenes/stats-scene.ts 40 kB {0} [built]
+[1111] multi ./src/utils/canvas-patch.ts phaser 40 bytes {1} [built]
+[1112] ./src/utils/canvas-patch.ts 690 bytes {1} [built]
+    + 1098 hidden modules
+Child html-webpack-plugin for "../index.html":
+     1 asset
+       [0] ./node_modules/html-webpack-plugin/lib/loader.js!./src/index.html 1.66 kB {0} [built]
+       [2] (webpack)/buildin/global.js 509 bytes {0} [built]
+       [3] (webpack)/buildin/module.js 517 bytes {0} [built]
+        + 1 hidden module
+[Browsersync] Access URLs:
+ ---------------------------------
+    Local: http://localhost:3001
+ External: http://192.168.0.4:3001
+ ---------------------------------
+[Browsersync] Serving files from: ./
+[Browsersync] Serving files from: ./build
+Hash: 93fdHash: 93fde9c246de05a11be1
+Version: webpack 3.11.0
+Time: 1969ms
+        Asset    Size  Chunks             Chunk Names
+../index.html  1.5 kB          [emitted]  
+ + 4 hidden assets
+   1113 modules
+Child html-webpack-plugin for "../index.html":
+     1 asset
+       [0] ./node_modules/html-webpack-plugin/lib/loader.js!./src/index.html 1.78 kB {1} [built]
+        + 3 hidde[Browsersy[Browsersync] Reloading BrHash: f0ce0104bbb7d8cf8ac7
+Version: webpack 3.11.0
+Time: 394ms
+        Asset     Size  Chunks             Chunk Names
+../index.html  1.95 kB          [emitted]  
+ + 4 hidden assets
+   1113 modules
+Child html-webpack-plugin for "../index.html":
+     1 asset
+       [0] ./node_modules/html-webpack-plugin/lib/loader.js!./src/index.html 2.26 kB {0} [built]
+        + 3 hidden modules
+[Browsersync] Reloading Browsers...
+Hash: eb88Hash: eb88bb0bcbb6d09de0b5
+Version: webpack 3.11.0
+Time: 846ms
+        Asset     Size  Chunks                    Chunk Names
+    bundle.js   727 kB       0  [emitted]  [big]  app
+bundle.js.map   860 kB       0  [emitted]         app
+../index.html  1.95 kB          [emitted]         
+ + 2 hidden assets
+  [24] ./src/main.ts 6.68 kB {0} [built]
+ [213] ./src/objects/image-overlay.ts 8.3 kB {0} [built]
+[1086] ./src/scenes/qix-scene.ts 57 kB {0} [built]
+[1087] ./src/objects/player.ts 3 kB {0} [built]
+[1088] ./src/objects/grid.ts 5.07 kB {0} [built]
+[1091] ./src/objects/current-lines.ts 2.23 kB {0} [built]
+[1093] ./src/objects/info.ts 2.79 kB {0} [built]
+[1095] ./src/objects/debug.ts 6.88 kB {0} [built]
+[1097] ./src/objects/levels.ts 801 bytes {0} [built]
+[1099] ./src/objects/sparkies.ts 1.83 kB {0} [built]
+[1100] ./src/objects/sparky.ts 7.31 kB {0} [built]
+[1102] ./src/objects/qixes.ts 1.72 kB {0} [built]
+[1103] ./src/objects/qix.ts 6.27 kB {0} [built]
+    + 1100 hidden modules
+Child html-webpack-plugin for "../index.html":
+     1 asset
+       [Browsersy[Browsersync] Reloading BrHash: b448Hash: b448eb8bab9e3f6a4006
+Version: webpack 3.11.0
+Time: 249ms
+        Asset     Size  Chunks             Chunk Names
+../index.html  2.13 kB          [emitted]  
+ + 4 hidden assets
+   1113 modules
+Child html-webpack-plugin for "../index.html":
+     1 asset
+       [0] ./node_modules/html-webpack-plugin/lib/loader.js!./src/index.html 2.44 kB {0} [built]
+        + 3 hidde[Browsersy[Browsersync] Reloading BrHash: 13faHash: 13fa7335e2bbea0ad85c
+Version: webpack 3.11.0
+Time: 799ms
+        Asset     Size  Chunks                    Chunk Names
+    bundle.js   728 kB       0  [emitted]  [big]  app
+bundle.js.map   861 kB       0  [emitted]         app
+../index.html  2.13 kB          [emitted]         
+ + 2 hidden assets
+  [24] ./src/main.ts 6.68 kB {0} [built]
+[1081] ./src/scenes/login-scene.ts 24.7 kB {0} [built]
+    + 1111 hidden modules
+Child html-webpack-plugin for "../index.html":
+     1 asset
+       [Browsersy[Browsersync] Reloading Browsers...

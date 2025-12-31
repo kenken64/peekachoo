@@ -1,0 +1,15 @@
+
+> peekachoo-backend@1.0.0 dev
+> node --watch src/server.js
+
+(node:21684) ExperimentalWarning: Watch mode is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+Server is running on http://localhost:3000
+WebSocket available at ws://localhost:3000/ws
+Environment: production
+[2025-12-31T16:43:09.240Z] GET /api/auth/check-username/kk7711
+[2025-12-31T16:43:16.374Z] POST /api/auth/register/start
+[2025-12-31T16:52:34.445Z] GET /api/projects
+[2025-12-31T16:52:34.451Z] GET /api/projects
