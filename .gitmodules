@@ -1,0 +1,6 @@
+[submodule "peekachoo-frontend"]
+	path = peekachoo-frontend
+	url = https://github.com/kenken64/peekachoo-frontend.git
+[submodule "peekachoo-backend"]
+	path = peekachoo-backend
+	url = https://github.com/kenken64/peekachoo-backend.git
