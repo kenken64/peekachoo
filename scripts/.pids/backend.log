@@ -2,14 +2,33 @@
 > peekachoo-backend@1.0.0 dev
 > node --watch src/server.js
 
-(node:21684) ExperimentalWarning: Watch mode is an experimental feature and might change at any time
+(node:43939) ExperimentalWarning: Watch mode is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
 SQLite database initialized
 [WebSocket] Server initialized on /ws
 Server is running on http://localhost:3000
 WebSocket available at ws://localhost:3000/ws
 Environment: production
-[2025-12-31T16:43:09.240Z] GET /api/auth/check-username/kk7711
-[2025-12-31T16:43:16.374Z] POST /api/auth/register/start
-[2025-12-31T16:52:34.445Z] GET /api/projects
-[2025-12-31T16:52:34.451Z] GET /api/projects
+[2025-12-31T19:24:08.063Z] POST /api/auth/register/start
+[2025-12-31T19:24:14.068Z] POST /api/auth/register/complete
+[Auth] Storing credential: {
+  credentialId: 'ShcCtbhu6o1FHFSFM98gqA',
+  userId: 'ab61f0a4-eea7-4961-b844-787751caaed2',
+  counter: 0
+}
+[Auth] Credential stored successfully
+[WebSocket] New connection attempt
+[2025-12-31T19:24:14.098Z] GET /api/games/my-games
+[2025-12-31T19:24:14.103Z] GET /api/games/published?limit=20&offset=0
+[WebSocket] User undefined authenticated
+[WebSocket] User undefined subscribed to global
+[2025-12-31T19:24:21.437Z] GET /api/auth/check-username/kk77118888
+[2025-12-31T19:24:21.446Z] POST /api/auth/login/start
+[2025-12-31T19:24:26.830Z] POST /api/auth/login/complete
+[Auth] Looking up credential: ShcCtbhu6o1FHFSFM98gqA
+[Auth] Credential found for user: ab61f0a4-eea7-4961-b844-787751caaed2
+[WebSocket] New connection attempt
+[WebSocket] User undefined authenticated
+[2025-12-31T19:24:26.856Z] GET /api/games/my-games
+[WebSocket] User undefined subscribed to global
+[2025-12-31T19:24:26.859Z] GET /api/games/published?limit=20&offset=0

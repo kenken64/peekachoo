@@ -20,6 +20,21 @@ echo -e "${GREEN}========================================${NC}"
 echo -e "${GREEN}   Starting Peekachoo Services${NC}"
 echo -e "${GREEN}========================================${NC}"
 
+# Define fixed ports
+BACKEND_PORT=3000
+FRONTEND_PORT=3001
+
+# Kill any existing processes on our ports
+echo -e "${YELLOW}Clearing ports...${NC}"
+for port in $BACKEND_PORT $FRONTEND_PORT; do
+    pid=$(lsof -ti :$port 2>/dev/null || true)
+    if [ -n "$pid" ]; then
+        echo -e "${YELLOW}Killing process on port $port (PID: $pid)${NC}"
+        kill -9 $pid 2>/dev/null || true
+        sleep 1
+    fi
+done
+
 # Check if directories exist
 if [ ! -d "$FRONTEND_DIR" ]; then
     echo -e "${RED}Error: Frontend directory not found at $FRONTEND_DIR${NC}"
@@ -69,7 +84,7 @@ if [ ! -d "node_modules" ]; then
     npm install
 fi
 
-npm run dev > "$PID_DIR/frontend.log" 2>&1 &
+FRONTEND_PORT=$FRONTEND_PORT npm run dev > "$PID_DIR/frontend.log" 2>&1 &
 FRONTEND_PID=$!
 echo $FRONTEND_PID > "$PID_DIR/frontend.pid"
 echo -e "${GREEN}Frontend started with PID: $FRONTEND_PID${NC}"
@@ -79,8 +94,8 @@ echo -e "${GREEN}========================================${NC}"
 echo -e "${GREEN}   All Services Started Successfully${NC}"
 echo -e "${GREEN}========================================${NC}"
 echo ""
-echo -e "Backend:  ${YELLOW}http://localhost:3000${NC} (API)"
-echo -e "Frontend: ${YELLOW}http://localhost:3000${NC} (Game)"
+echo -e "Backend:  ${YELLOW}http://localhost:$BACKEND_PORT${NC} (API)"
+echo -e "Frontend: ${YELLOW}http://localhost:$FRONTEND_PORT${NC} (Game)"
 echo ""
 echo -e "Logs:"
 echo -e "  Backend:  $PID_DIR/backend.log"
