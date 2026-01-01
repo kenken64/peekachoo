@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAuthenticated } from '@/lib/auth';
-import { searchUsers } from '@/lib/db';
+import { getUsers } from '@/lib/backendApi';
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     const validPage = Math.max(1, page);
     const validPageSize = Math.min(Math.max(1, pageSize), 100); // Max 100 per page
 
-    const result = searchUsers(search, validPage, validPageSize);
+    const result = await getUsers(search, validPage, validPageSize);
 
     return NextResponse.json(result);
   } catch (error) {

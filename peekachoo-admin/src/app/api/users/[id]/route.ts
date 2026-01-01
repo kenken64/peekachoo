@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAuthenticated } from '@/lib/auth';
-import { getUserById, deleteUser } from '@/lib/db';
+import { getUserById, deleteUser } from '@/lib/backendApi';
 
 export async function GET(
   request: NextRequest,
@@ -16,16 +16,16 @@ export async function GET(
     }
 
     const { id } = await params;
-    const user = getUserById(id);
 
-    if (!user) {
+    try {
+      const user = await getUserById(id);
+      return NextResponse.json({ user });
+    } catch {
       return NextResponse.json(
         { error: 'User not found' },
         { status: 404 }
       );
     }
-
-    return NextResponse.json({ user });
   } catch (error) {
     console.error('Error fetching user:', error);
     return NextResponse.json(
@@ -50,29 +50,19 @@ export async function DELETE(
 
     const { id } = await params;
 
-    // Check if user exists
-    const user = getUserById(id);
-    if (!user) {
+    try {
+      const result = await deleteUser(id);
+      return NextResponse.json({
+        success: true,
+        message: result.message,
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'User not found';
       return NextResponse.json(
-        { error: 'User not found' },
+        { error: message },
         { status: 404 }
       );
     }
-
-    // Delete user and related data
-    const deleted = deleteUser(id);
-
-    if (!deleted) {
-      return NextResponse.json(
-        { error: 'Failed to delete user' },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: `User ${user.username} deleted successfully`,
-    });
   } catch (error) {
     console.error('Error deleting user:', error);
     return NextResponse.json(

@@ -9,5 +9,7 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 export const config = {
   adminPassword: process.env.ADMIN_PASSWORD || 'admin123',
-  databasePath: process.env.DATABASE_PATH || '../peekachoo-backend/data/peekachoo.db',
+  // Backend API configuration
+  backendUrl: process.env.BACKEND_URL || 'http://localhost:3000',
+  adminApiKey: process.env.ADMIN_API_KEY || 'peekachoo-admin-api-key-change-in-production',
 };
