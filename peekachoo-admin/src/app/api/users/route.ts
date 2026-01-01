@@ -25,7 +25,20 @@ export async function GET(request: NextRequest) {
 
     const result = await getUsers(search, validPage, validPageSize);
 
-    return NextResponse.json(result);
+    // Transform to match frontend expected format
+    // Frontend expects: { users: [...], totalCount: number, totalPages: number }
+    // Users should have: id, username, display_name, created_at, updated_at
+    return NextResponse.json({
+      users: result.users.map(user => ({
+        id: user.id,
+        username: user.username,
+        display_name: user.displayName,
+        created_at: user.createdAt,
+        updated_at: user.updatedAt,
+      })),
+      totalCount: result.pagination.total,
+      totalPages: result.pagination.totalPages,
+    });
   } catch (error) {
     console.error('Error fetching users:', error);
     return NextResponse.json(
