@@ -1,0 +1,29 @@
+# Dependencies
+node_modules
+npm-debug.log*
+
+# Next.js build output
+.next
+
+# Environment files (will be set in Railway)
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Misc
+README.md
+*.md
