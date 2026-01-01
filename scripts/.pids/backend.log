@@ -2,33 +2,791 @@
 > peekachoo-backend@1.0.0 dev
 > node --watch src/server.js
 
-(node:43939) ExperimentalWarning: Watch mode is an experimental feature and might change at any time
-(Use `node --trace-warnings ...` to show where the warning was created)
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
 SQLite database initialized
 [WebSocket] Server initialized on /ws
 Server is running on http://localhost:3000
 WebSocket available at ws://localhost:3000/ws
-Environment: production
-[2025-12-31T19:24:08.063Z] POST /api/auth/register/start
-[2025-12-31T19:24:14.068Z] POST /api/auth/register/complete
-[Auth] Storing credential: {
-  credentialId: 'ShcCtbhu6o1FHFSFM98gqA',
-  userId: 'ab61f0a4-eea7-4961-b844-787751caaed2',
-  counter: 0
+Environment: development
+[WebSocket] New connection attempt
+[WebSocket] User undefined authenticated
+[WebSocket] User undefined subscribed to global
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
 }
-[Auth] Credential stored successfully
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+Server is running on http://localhost:3000
+WebSocket available at ws://localhost:3000/ws
+Environment: development
 [WebSocket] New connection attempt
-[2025-12-31T19:24:14.098Z] GET /api/games/my-games
-[2025-12-31T19:24:14.103Z] GET /api/games/published?limit=20&offset=0
 [WebSocket] User undefined authenticated
 [WebSocket] User undefined subscribed to global
-[2025-12-31T19:24:21.437Z] GET /api/auth/check-username/kk77118888
-[2025-12-31T19:24:21.446Z] POST /api/auth/login/start
-[2025-12-31T19:24:26.830Z] POST /api/auth/login/complete
-[Auth] Looking up credential: ShcCtbhu6o1FHFSFM98gqA
-[Auth] Credential found for user: ab61f0a4-eea7-4961-b844-787751caaed2
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+Server is running on http://localhost:3000
+WebSocket available at ws://localhost:3000/ws
+Environment: development
 [WebSocket] New connection attempt
 [WebSocket] User undefined authenticated
-[2025-12-31T19:24:26.856Z] GET /api/games/my-games
 [WebSocket] User undefined subscribed to global
-[2025-12-31T19:24:26.859Z] GET /api/games/published?limit=20&offset=0
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+ User undefined subscribed to global
+[2026-01-01T09:37:46.978Z] GET /api/auth/me
+[WebSocket] New connection attempt
+[WebSocket] User undefined authenticated
+[WebSocket] User undefined subscribed to global
+[2026-01-01T09:37:47.281Z] GET /api/games/my-games
+[2026-01-01T09:37:47.283Z] GET /api/games/published?limit=20&offset=0
+[2026-01-01T09:40:12.238Z] POST /api/leaderboard/sessions
+[ScoreService] Session started: {
+  sessionId: 'c7f1f0a8-0434-419e-bfd6-e548a1a7b27d',
+  userId: '84962ef9-b41e-4c1a-8a59-1204cc3de7df',
+  gameId: 'a3c3cadf-1f41-417e-9c40-47e76219721f'
+}
+[WebSocket] Player 84962ef9-b41e-4c1a-8a59-1204cc3de7df joined game a3c3cadf-1f41-417e-9c40-47e76219721f (session: c7f1f0a8-0434-419e-bfd6-e548a1a7b27d). Active players: 1
+[2026-01-01T09:40:12.248Z] GET /api/games/a3c3cadf-1f41-417e-9c40-47e76219721f
+[2026-01-01T09:40:12.256Z] POST /api/games/a3c3cadf-1f41-417e-9c40-47e76219721f/play
+[2026-01-01T09:40:26.612Z] POST /api/quiz/generate
+[Quiz] Fetched additional Pokemon from DB: [ 'sentret', 'jellicent', 'wugtrio' ]
+[2026-01-01T09:40:32.179Z] POST /api/leaderboard/scores
+[ScoreService] submitScore called with: {
+  userId: '84962ef9-b41e-4c1a-8a59-1204cc3de7df',
+  scoreData: {
+    gameId: 'a3c3cadf-1f41-417e-9c40-47e76219721f',
+    sessionId: 'c7f1f0a8-0434-419e-bfd6-e548a1a7b27d',
+    level: 1,
+    territoryPercentage: 0.6017492394611038,
+    timeTakenSeconds: 19,
+    livesRemaining: 3,
+    quizAttempts: 1,
+    pokemonId: 14,
+    pokemonName: 'kakuna'
+  }
+}
+[ScoreService] Inserting score record: {
+  scoreId: 'd5741143-cf86-46c1-b8dd-693fc48150c8',
+  level: 1,
+  totalScore: 3148
+}
+[ScoreService] Score record inserted successfully
+[2026-01-01T09:40:32.236Z] POST /api/leaderboard/sessions/c7f1f0a8-0434-419e-bfd6-e548a1a7b27d/end
+[ScoreService] Session ended: {
+  sessionId: 'c7f1f0a8-0434-419e-bfd6-e548a1a7b27d',
+  playTimeSeconds: 20,
+  totalScore: 3148,
+  levelsCompleted: 1
+}
+[WebSocket] Player 84962ef9-b41e-4c1a-8a59-1204cc3de7df left game a3c3cadf-1f41-417e-9c40-47e76219721f (session: c7f1f0a8-0434-419e-bfd6-e548a1a7b27d). Active players: 0
+[2026-01-01T09:40:36.664Z] GET /api/games/my-games
+[2026-01-01T09:40:36.666Z] GET /api/games/published?limit=20&offset=0
+[2026-01-01T09:40:38.390Z] GET /api/leaderboard/global?period=all_time&limit=30
+[2026-01-01T09:40:38.399Z] GET /api/leaderboard/around-me?period=all_time
+[2026-01-01T09:40:40.014Z] GET /api/leaderboard/global?period=weekly&limit=30
+[2026-01-01T09:40:40.027Z] GET /api/leaderboard/around-me?period=weekly
+[2026-01-01T09:40:40.681Z] GET /api/leaderboard/global?period=daily&limit=30
+[2026-01-01T09:40:40.694Z] GET /api/leaderboard/around-me?period=daily
+[2026-01-01T09:40:41.837Z] GET /api/leaderboard/global?period=weekly&limit=30
+[2026-01-01T09:40:41.843Z] GET /api/leaderboard/around-me?period=weekly
+[2026-01-01T09:40:42.353Z] GET /api/leaderboard/global?period=all_time&limit=30
+[2026-01-01T09:40:42.362Z] GET /api/leaderboard/around-me?period=all_time
+[2026-01-01T09:40:44.709Z] GET /api/games/my-games
+[2026-01-01T09:40:44.711Z] GET /api/games/published?limit=20&offset=0
+[2026-01-01T09:43:35.565Z] GET /api/auth/me
+[WebSocket] New connection attempt
+[2026-01-01T09:43:35.862Z] GET /api/games/my-games
+[2026-01-01T09:43:35.864Z] GET /api/games/published?limit=20&offset=0
+[WebSocket] User undefined authenticated
+[WebSocket] User undefined subscribed to global
+[2026-01-01T09:43:51.072Z] GET /api/auth/me
+[WebSocket] New connection attempt
+[2026-01-01T09:43:51.208Z] GET /api/games/my-games
+[2026-01-01T09:43:51.211Z] GET /api/games/published?limit=20&offset=0
+[WebSocket] User undefined authenticated
+[WebSocket] User undefined subscribed to global
+[2026-01-01T09:44:14.974Z] GET /api/auth/me
+[WebSocket] New connection attempt
+[WebSocket] User undefined authenticated
+[WebSocket] User undefined subscribed to global
+[2026-01-01T09:44:15.099Z] GET /api/games/my-games
+[2026-01-01T09:44:15.102Z] GET /api/games/published?limit=20&offset=0
+[2026-01-01T09:46:11.179Z] GET /api/stats/me
+[2026-01-01T09:46:11.184Z] GET /api/achievements
+[2026-01-01T09:46:23.181Z] GET /api/games/my-games
+[2026-01-01T09:46:23.183Z] GET /api/games/published?limit=20&offset=0
+[2026-01-01T09:46:33.449Z] GET /api/games/ab7cd890-0ad8-4ab1-b2af-e8b8dcdc603b
+[2026-01-01T09:46:45.755Z] PUT /api/games/ab7cd890-0ad8-4ab1-b2af-e8b8dcdc603b
+[2026-01-01T09:46:46.279Z] GET /api/games/my-games
+[2026-01-01T09:46:46.281Z] GET /api/games/published?limit=20&offset=0
+[2026-01-01T09:46:48.664Z] GET /api/games/ab7cd890-0ad8-4ab1-b2af-e8b8dcdc603b
+[2026-01-01T09:46:48.666Z] POST /api/leaderboard/sessions
+[ScoreService] Session started: {
+  sessionId: '7c3d0e4a-feb0-454e-9758-ecf27f46c76f',
+  userId: '84962ef9-b41e-4c1a-8a59-1204cc3de7df',
+  gameId: 'ab7cd890-0ad8-4ab1-b2af-e8b8dcdc603b'
+}
+[WebSocket] Player 84962ef9-b41e-4c1a-8a59-1204cc3de7df joined game ab7cd890-0ad8-4ab1-b2af-e8b8dcdc603b (session: 7c3d0e4a-feb0-454e-9758-ecf27f46c76f). Active players: 1
+[2026-01-01T09:46:48.680Z] POST /api/games/ab7cd890-0ad8-4ab1-b2af-e8b8dcdc603b/play
+[2026-01-01T09:47:05.622Z] POST /api/quiz/generate
+[2026-01-01T09:47:12.206Z] POST /api/leaderboard/scores
+[ScoreService] submitScore called with: {
+  userId: '84962ef9-b41e-4c1a-8a59-1204cc3de7df',
+  scoreData: {
+    gameId: 'ab7cd890-0ad8-4ab1-b2af-e8b8dcdc603b',
+    sessionId: '7c3d0e4a-feb0-454e-9758-ecf27f46c76f',
+    level: 1,
+    territoryPercentage: 0.6813885267275098,
+    timeTakenSeconds: 23,
+    livesRemaining: 3,
+    quizAttempts: 1,
+    pokemonId: 416,
+    pokemonName: 'vespiquen'
+  }
+}
+[ScoreService] Inserting score record: {
+  scoreId: 'e98057be-6469-411c-9311-a8ef1b7228e1',
+  level: 1,
+  totalScore: 3219
+}
+[ScoreService] Score record inserted successfully
+[2026-01-01T09:47:27.646Z] POST /api/quiz/generate
+[2026-01-01T09:47:35.163Z] POST /api/leaderboard/scores
+[ScoreService] submitScore called with: {
+  userId: '84962ef9-b41e-4c1a-8a59-1204cc3de7df',
+  scoreData: {
+    gameId: 'ab7cd890-0ad8-4ab1-b2af-e8b8dcdc603b',
+    sessionId: '7c3d0e4a-feb0-454e-9758-ecf27f46c76f',
+    level: 2,
+    territoryPercentage: 0.6022924815297697,
+    timeTakenSeconds: 20,
+    livesRemaining: 3,
+    quizAttempts: 1,
+    pokemonId: 528,
+    pokemonName: 'swoobat'
+  }
+}
+[ScoreService] Inserting score record: {
+  scoreId: 'c6a26ce6-0682-406c-a41c-b02f418c453d',
+  level: 2,
+  totalScore: 4083
+}
+[ScoreService] Score record inserted successfully
+[2026-01-01T09:47:51.345Z] POST /api/quiz/generate
+[2026-01-01T09:47:57.732Z] POST /api/leaderboard/scores
+[ScoreService] submitScore called with: {
+  userId: '84962ef9-b41e-4c1a-8a59-1204cc3de7df',
+  scoreData: {
+    gameId: 'ab7cd890-0ad8-4ab1-b2af-e8b8dcdc603b',
+    sessionId: '7c3d0e4a-feb0-454e-9758-ecf27f46c76f',
+    level: 3,
+    territoryPercentage: 0.7217514124293786,
+    timeTakenSeconds: 20,
+    livesRemaining: 3,
+    quizAttempts: 2,
+    pokemonId: 526,
+    pokemonName: 'gigalith'
+  }
+}
+[ScoreService] Inserting score record: {
+  scoreId: 'b745fb14-91bb-481a-a157-aa29fe88682b',
+  level: 3,
+  totalScore: 4235
+}
+[ScoreService] Score record inserted successfully
+[2026-01-01T09:48:12.745Z] POST /api/quiz/generate
+[2026-01-01T09:48:17.812Z] POST /api/leaderboard/scores
+[ScoreService] submitScore called with: {
+  userId: '84962ef9-b41e-4c1a-8a59-1204cc3de7df',
+  scoreData: {
+    gameId: 'ab7cd890-0ad8-4ab1-b2af-e8b8dcdc603b',
+    sessionId: '7c3d0e4a-feb0-454e-9758-ecf27f46c76f',
+    level: 4,
+    territoryPercentage: 0.6346153846153847,
+    timeTakenSeconds: 18,
+    livesRemaining: 3,
+    quizAttempts: 2,
+    pokemonId: 10212,
+    pokemonName: 'corviknight-gmax'
+  }
+}
+[ScoreService] Inserting score record: {
+  scoreId: '0da1f35b-93ab-4b4c-a028-d2e2fc2abc57',
+  level: 4,
+  totalScore: 4501
+}
+[ScoreService] Score record inserted successfully
+[2026-01-01T09:48:41.227Z] POST /api/quiz/generate
+[2026-01-01T09:48:49.376Z] POST /api/leaderboard/scores
+[ScoreService] submitScore called with: {
+  userId: '84962ef9-b41e-4c1a-8a59-1204cc3de7df',
+  scoreData: {
+    gameId: 'ab7cd890-0ad8-4ab1-b2af-e8b8dcdc603b',
+    sessionId: '7c3d0e4a-feb0-454e-9758-ecf27f46c76f',
+    level: 5,
+    territoryPercentage: 0.72300086918731,
+    timeTakenSeconds: 29,
+    livesRemaining: 3,
+    quizAttempts: 2,
+    pokemonId: 1018,
+    pokemonName: 'archaludon'
+  }
+}
+[ScoreService] Inserting score record: {
+  scoreId: '1dd3fe1c-8e37-46d4-9293-b4ff8aa42f25',
+  level: 5,
+  totalScore: 4956
+}
+[ScoreService] Score record inserted successfully
+[2026-01-01T09:48:49.436Z] POST /api/leaderboard/sessions/7c3d0e4a-feb0-454e-9758-ecf27f46c76f/end
+[ScoreService] Session ended: {
+  sessionId: '7c3d0e4a-feb0-454e-9758-ecf27f46c76f',
+  playTimeSeconds: 121,
+  totalScore: 20994,
+  levelsCompleted: 5
+}
+[WebSocket] Player 84962ef9-b41e-4c1a-8a59-1204cc3de7df left game ab7cd890-0ad8-4ab1-b2af-e8b8dcdc603b (session: 7c3d0e4a-feb0-454e-9758-ecf27f46c76f). Active players: 0
+[2026-01-01T09:48:52.095Z] GET /api/games/my-games
+[2026-01-01T09:48:52.096Z] GET /api/games/published?limit=20&offset=0
+[2026-01-01T09:48:53.696Z] GET /api/leaderboard/global?period=all_time&limit=30
+[2026-01-01T09:48:53.712Z] GET /api/leaderboard/around-me?period=all_time
+[2026-01-01T09:48:56.570Z] GET /api/leaderboard/global?period=weekly&limit=30
+[2026-01-01T09:48:56.578Z] GET /api/leaderboard/around-me?period=weekly
+[2026-01-01T09:48:57.478Z] GET /api/leaderboard/global?period=daily&limit=30
+[2026-01-01T09:48:57.494Z] GET /api/leaderboard/around-me?period=daily
+[2026-01-01T09:48:58.209Z] GET /api/leaderboard/global?period=all_time&limit=30
+[2026-01-01T09:48:58.227Z] GET /api/leaderboard/around-me?period=all_time
+[2026-01-01T09:48:59.383Z] GET /api/games/my-games
+[2026-01-01T09:48:59.384Z] GET /api/games/published?limit=20&offset=0
+[2026-01-01T09:49:00.116Z] GET /api/stats/me
+[2026-01-01T09:49:00.118Z] GET /api/achievements
+[2026-01-01T09:49:08.413Z] GET /api/stats/history?limit=30
+[2026-01-01T09:49:10.932Z] GET /api/stats/collection?filter=all&sortBy=id&limit=30
+[2026-01-01T09:49:14.400Z] GET /api/games/my-games
+[2026-01-01T09:49:14.401Z] GET /api/games/published?limit=20&offset=0
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+le src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+Server is running on http://localhost:3000
+WebSocket available at ws://localhost:3000/ws
+Environment: development
+[WebSocket] New connection attempt
+[WebSocket] User undefined authenticated
+[WebSocket] User undefined subscribed to global
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+Server is running on http://localhost:3000
+WebSocket available at ws://localhost:3000/ws
+Environment: development
+[WebSocket] New connection attempt
+[WebSocket] User undefined authenticated
+[WebSocket] User undefined subscribed to global
+[2026-01-01T09:23:39.421Z] POST /api/leaderboard/sessions
+[ScoreService] Session started: {
+  sessionId: 'd1dd6dcd-af5a-4221-8f95-d283c5b8fb65',
+  userId: '84962ef9-b41e-4c1a-8a59-1204cc3de7df',
+  gameId: 'a3c3cadf-1f41-417e-9c40-47e76219721f'
+}
+[2026-01-01T09:23:39.435Z] GET /api/games/a3c3cadf-1f41-417e-9c40-47e76219721f
+[2026-01-01T09:23:39.443Z] POST /api/games/a3c3cadf-1f41-417e-9c40-47e76219721f/play
+[2026-01-01T09:23:48.199Z] POST /api/leaderboard/sessions/d1dd6dcd-af5a-4221-8f95-d283c5b8fb65/end
+[ScoreService] Session ended: {
+  sessionId: 'd1dd6dcd-af5a-4221-8f95-d283c5b8fb65',
+  playTimeSeconds: 9,
+  totalScore: 0,
+  levelsCompleted: 0
+}
+[2026-01-01T09:23:48.217Z] GET /api/games/my-games
+[2026-01-01T09:23:48.220Z] GET /api/games/published?limit=20&offset=0
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
