@@ -32,12 +32,19 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
-# Set default environment variables
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
-ENV ADMIN_PASSWORD=changeme
-ENV BACKEND_URL=http://localhost:3000
-ENV ADMIN_API_KEY=changeme
+# Declare build arguments
+ARG PORT
+ARG HOSTNAME
+ARG ADMIN_PASSWORD
+ARG BACKEND_URL
+ARG ADMIN_API_KEY
+
+# Set environment variables from build arguments
+ENV PORT=${PORT}
+ENV HOSTNAME=${HOSTNAME}
+ENV ADMIN_PASSWORD=${ADMIN_PASSWORD}
+ENV BACKEND_URL=${BACKEND_URL}
+ENV ADMIN_API_KEY=${ADMIN_API_KEY}
 
 # Switch to non-root user
 USER nextjs
