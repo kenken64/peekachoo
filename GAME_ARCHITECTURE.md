@@ -563,6 +563,476 @@ CREATE TABLE user_achievements (
 
 ---
 
+## Frontend Domain Design (Beginner's Guide)
+
+This section explains the TypeScript code architecture in the frontend. The code follows **Domain-Driven Design (DDD)** principles, where each file represents a real-world concept from the game.
+
+### What is Domain-Driven Design?
+
+Think of it like organizing a kitchen:
+- **Domain Objects** = Kitchen tools (each has a specific purpose)
+- **Scenes** = Different cooking stations (prep, cooking, plating)
+- **Services** = Utility workers (delivery, cleanup)
+
+The game code is organized the same way - each file handles ONE specific thing.
+
+---
+
+### Core Game Objects (`src/objects/`)
+
+These are the "building blocks" of the game. Each class represents something you can see or interact with.
+
+#### 🎮 Player (`player.ts`)
+**What it is:** The character you control on screen (a colored circle).
+
+**Key concepts:**
+```
+Player
+├── position (x, y coordinates on screen)
+├── speed (how fast it moves)
+├── graphics (the visual circle you see)
+└── movement tracking (where it was, where it's going)
+```
+
+**How it works:**
+- Listens to keyboard arrow keys
+- Updates position every frame
+- Tracks if player is on a "safe" border or drawing a new line
+
+```typescript
+// Simplified concept:
+class Player {
+    x, y          // Current position
+    speed         // Pixels moved per update
+    previousPoint // Where player was last frame
+    
+    move(keys) {
+        if (keys.left) x -= speed;
+        if (keys.right) x += speed;
+        // etc...
+    }
+}
+```
+
+---
+
+#### 🟦 Grid (`grid.ts`)
+**What it is:** The playing field - the rectangular area where the game happens.
+
+**Key concepts:**
+```
+Grid
+├── frame (the outer boundary rectangle)
+├── filledPolygons (areas player has claimed)
+├── currentLines (line player is currently drawing)
+└── allPoints (tracking system for polygon calculations)
+```
+
+**How it works:**
+1. Player moves along the border (safe)
+2. Player ventures into unclaimed territory (drawing a line)
+3. When player returns to a border, the line "closes" into a polygon
+4. That polygon becomes claimed territory
+
+**Real-world analogy:** Imagine drawing on a piece of paper. The frame is the paper's edge. When you draw a closed shape, that area is now "yours."
+
+---
+
+#### 👻 Sparky (`sparky.ts`) & Sparkies (`sparkies.ts`)
+**What it is:** Enemy that patrols the borders. If it touches you on the border, you die.
+
+**Key concepts:**
+```
+Sparky (single enemy)
+├── position (x, y)
+├── direction (UP, DOWN, LEFT, RIGHT)
+├── speed (how fast it moves)
+└── tick (controls animation timing)
+
+Sparkies (collection manager)
+├── sparkies[] (array of all active Sparkies)
+├── startupTimes (when each one appears)
+└── collision detection
+```
+
+**How it works:**
+- Moves along borders and claimed territory edges
+- At intersections, randomly picks a new direction
+- Cannot go backwards (adds challenge)
+
+**Real-world analogy:** Like a security guard patrolling the walls of a building, but it chooses random turns at corners.
+
+---
+
+#### 🌀 Qix (`qix.ts`) & Qixes (`qixes.ts`)
+**What it is:** The main enemy that bounces around the unclaimed territory. If it touches your drawing line, you die.
+
+**Key concepts:**
+```
+Qix (single enemy)
+├── position (x, y)
+├── directionDegrees (0-360, angle of movement)
+├── speed (movement speed)
+├── lines[] (visual "tail" effect - multiple colored lines)
+└── collision detection
+
+Qixes (collection manager)
+├── qixes[] (array of all active Qixes)
+├── startupTimes (when each appears)
+└── collision detection
+```
+
+**How it works:**
+- Moves in a direction (angle in degrees)
+- Bounces off walls and claimed polygons
+- Has a "tail" of colored lines for visual effect
+- Checks if it's touching the player's current drawing line
+
+**Real-world analogy:** Like a bouncy ball in a room. It bounces off walls but can't enter closed areas.
+
+---
+
+### Geometry Helper Classes ("Ext" = Extended)
+
+These classes add extra functionality to Phaser's built-in geometry classes.
+
+#### 📍 ExtPoint (`ext-point.ts`)
+**What it is:** A point (x, y) with helper methods.
+
+**Why it exists:** Phaser's `Point` class only stores coordinates. `ExtPoint` adds comparisons:
+
+```typescript
+// What ExtPoint adds:
+point.isLeftOf(otherPoint)     // Is this point to the left?
+point.isAboveOf(otherPoint)    // Is this point higher up?
+point.equals(otherPoint)       // Are they the same spot?
+point.isBetweenTwoPointsInclusive(p1, p2)  // Is it on a line between two points?
+```
+
+**Real-world analogy:** A map pin that can tell you "I'm north of you" or "I'm at the same location as that other pin."
+
+---
+
+#### 📐 ExtRectangle (`ext-rectangle.ts`)
+**What it is:** A rectangle with collision detection.
+
+**Why it exists:** The game frame needs to know:
+- Is a point on my edge?
+- Is a line crossing through me?
+- Which side of me is this point on?
+
+```typescript
+// What ExtRectangle adds:
+rect.pointOnTopSide(point)      // Is point touching top edge?
+rect.pointOnOutline(point)      // Is point on ANY edge?
+rect.collisionWithLine(line)    // Does this line cross my edges?
+rect.pointOutside(point)        // Is point completely outside me?
+```
+
+---
+
+#### 🔷 ExtPolygon (`ext-polygon.ts`)
+**What it is:** A closed shape (polygon) with area calculation.
+
+**Why it exists:** When player claims territory, we need:
+- Calculate what percentage of the game area this polygon covers
+- Check if points/enemies are inside it
+- Draw it on screen
+
+```typescript
+// What ExtPolygon adds:
+polygon.percentArea           // "This shape is 15.5% of the playing field"
+polygon.outlineIntersects(point)  // Is point on the edge?
+polygon.innerIntersects(point)    // Is point INSIDE the shape?
+```
+
+**The Math:** Uses a "ray casting" algorithm - draw a line from the point to the right edge. If it crosses an odd number of polygon edges, the point is inside.
+
+---
+
+#### 🎨 FilledPolygons (`filled-polygons.ts`)
+**What it is:** Manager for all claimed territory polygons.
+
+**What it does:**
+```
+FilledPolygons
+├── polygons[] (all claimed shapes)
+├── graphics (Phaser drawing object)
+├── imageOverlay (reveals Pokemon image)
+├── percentArea() → total % claimed
+└── collision methods
+```
+
+**How territory claiming works:**
+1. Player draws a closed loop
+2. System calculates the new polygon
+3. Polygon is added to `FilledPolygons`
+4. `ImageOverlay` reveals that portion of the hidden Pokemon image
+
+---
+
+### Drawing & Lines
+
+#### ✏️ CurrentLines (`current-lines.ts`)
+**What it is:** Tracks the line player is currently drawing.
+
+**Key concepts:**
+```
+CurrentLines
+├── points[] (corner points of the line)
+├── lines[] (line segments between points)
+├── graphics (draws the line on screen)
+```
+
+**How it works:**
+- Starts when player leaves a safe border
+- Adds a new line segment on each 90° turn
+- Resets when player returns to a border (line becomes a polygon)
+- Resets if player dies (line disappears)
+
+---
+
+#### 📊 AllPoints (`all-points.ts`)
+**What it is:** Calculates how to close a polygon when player returns to a border.
+
+**The problem it solves:**
+When you draw a line and return to the border, there are TWO possible polygons (one on each side of your line). This class:
+1. Calculates both possible polygons
+2. Picks the smaller one (game rule: you claim the smaller area)
+3. Returns the polygon points in clockwise order
+
+**Real-world analogy:** If you draw a line across a piece of paper, you've created two regions. This picks the smaller region.
+
+---
+
+### Visual Effects
+
+#### 🖼️ ImageOverlay (`image-overlay.ts`)
+**What it is:** Manages revealing the hidden Pokemon image as territory is claimed.
+
+**How it works:**
+```
+ImageOverlay (Singleton pattern - only ONE exists)
+├── canvas (HTML5 canvas separate from Phaser)
+├── image (the Pokemon image to reveal)
+├── polygons[] (claimed areas)
+└── clipping (only show image through claimed polygons)
+```
+
+**The reveal effect:**
+1. Pokemon image is hidden behind a mask
+2. Each claimed polygon acts as a "window"
+3. Canvas uses clipping to only show image through those windows
+4. As you claim more territory, more image is revealed
+
+---
+
+### Game State & Flow
+
+#### 📈 Levels (`levels.ts`)
+**What it is:** Tracks level progression and difficulty scaling.
+
+```typescript
+Levels
+├── currentLevel (1, 2, 3...)
+├── coverageTarget (% needed to win)
+└── nextLevel() → increases difficulty
+```
+
+**Difficulty scaling:**
+- Each level: Qix moves faster (`qixSpeed++`)
+- Each level: Qix updates more frequently (`qixTick--`)
+- Higher levels may have more enemies
+
+---
+
+#### 🧭 Direction (`direction.ts`)
+**What it is:** Simple enum for movement directions.
+
+```typescript
+enum Direction {
+    UP = 1,
+    DOWN,
+    LEFT,
+    RIGHT
+}
+```
+
+**Why it's useful:** Instead of remembering "1 means up", code reads: `if (direction === Direction.UP)`
+
+---
+
+#### 💥 Collision (`collision.ts`)
+**What it is:** Types of collisions with chainable checking.
+
+```typescript
+enum CollisionType {
+    NONE,
+    WITH_VERTICAL_LINE,
+    WITH_HORIZONTAL_LINE
+}
+
+// Chainable collision checking:
+Collision.NONE
+    .or(() => checkWallCollision())
+    .or(() => checkEnemyCollision())
+```
+
+**Why it's useful:** Clean way to check multiple collision types without nested if-statements.
+
+---
+
+### Scenes (`src/scenes/`)
+
+Scenes are like "screens" or "pages" in the game. Each one handles a different game state.
+
+| Scene | Purpose |
+|-------|---------|
+| `login-scene.ts` | User login with passkeys |
+| `menu-scene.ts` | Main menu (play, leaderboard, stats) |
+| `qix-scene.ts` | **Main gameplay** - where all the action happens |
+| `leaderboard-scene.ts` | View high scores |
+| `stats-scene.ts` | View your Pokemon collection |
+| `game-create-scene.ts` | Create custom games |
+
+#### QixScene - The Main Game Loop
+
+```
+QixScene Lifecycle:
+1. init()    → Set up initial state
+2. preload() → Load assets (images, sounds)
+3. create()  → Create all game objects
+4. update()  → Called 60x per second - game logic here!
+```
+
+**The update() loop (simplified):**
+```typescript
+update() {
+    // 1. Move player based on input
+    player.move(cursors);
+    
+    // 2. Update grid (check for closed polygons)
+    grid.update(player);
+    
+    // 3. Move enemies
+    sparkies.update();
+    qixes.update();
+    
+    // 4. Check collisions
+    if (sparkies.hitPlayer() || qixes.hitPlayerLine()) {
+        playerDies();
+    }
+    
+    // 5. Check win condition
+    if (grid.percentClaimed >= 75) {
+        levelComplete();
+    }
+    
+    // 6. Update info display
+    info.update();
+}
+```
+
+---
+
+### Design Patterns Used
+
+| Pattern | Where | Why |
+|---------|-------|-----|
+| **Singleton** | `ImageOverlay` | Only one overlay should exist |
+| **Decorator** | `ExtPoint`, `ExtPolygon` | Add methods to existing Phaser classes |
+| **Composition** | `Grid` contains `FilledPolygons`, `CurrentLines` | Complex objects from simple ones |
+| **Collection Manager** | `Sparkies` manages `Sparky[]` | Centralize multi-object logic |
+| **State Machine** | Scene transitions | Clear game state management |
+
+---
+
+### Data Flow Diagram
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│                         GAME LOOP (60 FPS)                       │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌─────────┐    ┌───────┐    ┌────────────────┐                 │
+│  │Keyboard │───>│Player │───>│CurrentLines    │                 │
+│  │ Input   │    │ Move  │    │(drawing state) │                 │
+│  └─────────┘    └───────┘    └───────┬────────┘                 │
+│                                      │                           │
+│                                      ▼                           │
+│                              ┌───────────────┐                   │
+│                              │ Line closed?  │                   │
+│                              └───────┬───────┘                   │
+│                                      │ YES                       │
+│                                      ▼                           │
+│                         ┌─────────────────────┐                  │
+│                         │ AllPoints calculates│                  │
+│                         │ new polygon         │                  │
+│                         └──────────┬──────────┘                  │
+│                                    │                             │
+│                                    ▼                             │
+│        ┌──────────────────────────────────────────────┐         │
+│        │              FilledPolygons                   │         │
+│        │  ┌─────────────┐     ┌─────────────────┐     │         │
+│        │  │ Add polygon │────>│ ImageOverlay    │     │         │
+│        │  │ to list     │     │ reveals image   │     │         │
+│        │  └─────────────┘     └─────────────────┘     │         │
+│        └──────────────────────────────────────────────┘         │
+│                                    │                             │
+│                                    ▼                             │
+│                         ┌─────────────────────┐                  │
+│                         │ Check: >= 75%?      │                  │
+│                         └──────────┬──────────┘                  │
+│                                    │ YES                         │
+│                                    ▼                             │
+│                         ┌─────────────────────┐                  │
+│                         │ LEVEL COMPLETE!     │                  │
+│                         │ Show Quiz, Submit   │                  │
+│                         │ Score to Backend    │                  │
+│                         └─────────────────────┘                  │
+│                                                                  │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │                    ENEMIES (parallel)                    │    │
+│  │  ┌─────────┐                        ┌─────────┐         │    │
+│  │  │Sparkies │── patrol borders ──>   │ Check   │         │    │
+│  │  │         │                        │collision│         │    │
+│  │  └─────────┘                        │ with    │──> DEATH│    │
+│  │  ┌─────────┐                        │ player  │         │    │
+│  │  │ Qixes   │── bounce in open ──>   │         │         │    │
+│  │  └─────────┘                        └─────────┘         │    │
+│  └─────────────────────────────────────────────────────────┘    │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Quick Reference: File → Purpose
+
+| File | One-Line Description |
+|------|---------------------|
+| `player.ts` | User-controlled character movement |
+| `grid.ts` | Playing field and territory tracking |
+| `sparky.ts` | Single border-patrolling enemy |
+| `sparkies.ts` | Manages all Sparky enemies |
+| `qix.ts` | Single bouncing enemy |
+| `qixes.ts` | Manages all Qix enemies |
+| `ext-point.ts` | Point with comparison helpers |
+| `ext-polygon.ts` | Polygon with area calculation |
+| `ext-rectangle.ts` | Rectangle with collision detection |
+| `filled-polygons.ts` | All claimed territory |
+| `current-lines.ts` | Line being drawn right now |
+| `all-points.ts` | Polygon closing calculations |
+| `image-overlay.ts` | Pokemon image reveal effect |
+| `levels.ts` | Level progression and difficulty |
+| `direction.ts` | UP/DOWN/LEFT/RIGHT constants |
+| `collision.ts` | Collision type handling |
+| `info.ts` | HUD display (score, lives, %) |
+| `debug.ts` | Developer debugging tools |
+| `virtual-dpad.ts` | Mobile touch controls |
+
+---
+
 ## File Structure
 
 ```

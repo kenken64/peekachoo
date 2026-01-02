@@ -29,157 +29,206 @@ SQLite database initialized
 Server is running on http://localhost:3000
 WebSocket available at ws://localhost:3000/ws
 Environment: development
-bed to global
-[2026-01-01T10:06:30.326Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:06:30.647Z] GET /api/games/my-games
-[2026-01-01T10:06:30.649Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:07:38.269Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:07:38.396Z] GET /api/games/my-games
-[2026-01-01T10:07:38.398Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:08:19.945Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:08:20.247Z] GET /api/games/my-games
-[2026-01-01T10:08:20.249Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:09:37.450Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:09:37.761Z] GET /api/games/my-games
-[2026-01-01T10:09:37.763Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:09:53.102Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:09:53.401Z] GET /api/games/my-games
-[2026-01-01T10:09:53.403Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:10:11.231Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:10:11.534Z] GET /api/games/my-games
-[2026-01-01T10:10:11.536Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:11:52.560Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:11:52.890Z] GET /api/games/my-games
-[2026-01-01T10:11:52.892Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:12:03.781Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:12:04.114Z] GET /api/games/my-games
-[2026-01-01T10:12:04.117Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:12:20.225Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:12:20.534Z] GET /api/games/my-games
-[2026-01-01T10:12:20.535Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:12:58.142Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:12:58.439Z] GET /api/games/my-games
-[2026-01-01T10:12:58.441Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:13:16.926Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:13:17.230Z] GET /api/games/my-games
-[2026-01-01T10:13:17.232Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:13:28.747Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:13:29.051Z] GET /api/games/my-games
-[2026-01-01T10:13:29.053Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:15:22.930Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:15:23.071Z] GET /api/games/my-games
-[2026-01-01T10:15:23.073Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:15:36.227Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:15:36.525Z] GET /api/games/my-games
-[2026-01-01T10:15:36.527Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:16:41.031Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:16:41.162Z] GET /api/games/my-games
-[2026-01-01T10:16:41.164Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:16:45.791Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:16:45.947Z] GET /api/games/my-games
-[2026-01-01T10:16:45.949Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:17:17.634Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:17:17.945Z] GET /api/games/my-games
-[2026-01-01T10:17:17.947Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:17:25.772Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:17:26.097Z] GET /api/games/my-games
-[2026-01-01T10:17:26.099Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:18:16.028Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:18:16.333Z] GET /api/games/my-games
-[2026-01-01T10:18:16.335Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:18:26.187Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:18:26.508Z] GET /api/games/my-games
-[2026-01-01T10:18:26.510Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:19:27.258Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:19:27.398Z] GET /api/games/my-games
-[2026-01-01T10:19:27.400Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:20:02.130Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:20:02.442Z] GET /api/games/my-games
-[2026-01-01T10:20:02.444Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:20:28.628Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:20:28.946Z] GET /api/games/my-games
-[2026-01-01T10:20:28.948Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:20:47.943Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:20:48.250Z] GET /api/games/my-games
-[2026-01-01T10:20:48.252Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:21:23.507Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:21:23.639Z] GET /api/games/my-games
-[2026-01-01T10:21:23.641Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+Server is running on http://localhost:3000
+WebSocket available at ws://localhost:3000/ws
+Environment: development
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+Server is running on http://localhost:3000
+WebSocket available at ws://localhost:3000/ws
+Environment: development
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+Server is running on http://localhost:3000
+WebSocket available at ws://localhost:3000/ws
+Environment: development
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+ebSocket] User undefined subscribed to global
 [2026-01-01T10:21:44.780Z] GET /api/auth/me
 [WebSocket] New connection attempt
 [2026-01-01T10:21:44.916Z] GET /api/games/my-games
@@ -247,69 +296,848 @@ Emitted 'error' event on WebSocketServer instance at:
 
 Node.js v24.11.1
 Failed running 'src/server.js'. Waiting for file changes before restarting...
-4.620Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:26:24.777Z] GET /api/games/my-games
-[2026-01-01T10:26:24.779Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:31:28.514Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:31:28.650Z] GET /api/games/my-games
-[2026-01-01T10:31:28.652Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:34:09.396Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:34:09.564Z] GET /api/games/my-games
-[2026-01-01T10:34:09.565Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:35:29.900Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:35:30.217Z] GET /api/games/my-games
-[2026-01-01T10:35:30.219Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:35:53.462Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:35:53.778Z] GET /api/games/my-games
-[2026-01-01T10:35:53.780Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:36:20.032Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:36:20.348Z] GET /api/games/my-games
-[2026-01-01T10:36:20.350Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:36:48.958Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:36:49.278Z] GET /api/games/my-games
-[2026-01-01T10:36:49.280Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:37:51.492Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:37:51.828Z] GET /api/games/my-games
-[2026-01-01T10:37:51.830Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:38:25.606Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:38:25.746Z] GET /api/games/my-games
-[2026-01-01T10:38:25.748Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:39:23.826Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:39:23.954Z] GET /api/games/my-games
-[2026-01-01T10:39:23.956Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
-[2026-01-01T10:39:55.062Z] GET /api/auth/me
-[WebSocket] New connection attempt
-[2026-01-01T10:39:55.198Z] GET /api/games/my-games
-[2026-01-01T10:39:55.200Z] GET /api/games/published?limit=20&offset=0
-[WebSocket] User undefined authenticated
-[WebSocket] User undefined subscribed to global
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+Server is running on http://localhost:3000
+WebSocket available at ws://localhost:3000/ws
+Environment: development
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+Server is running on http://localhost:3000
+WebSocket available at ws://localhost:3000/ws
+Environment: development
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+Server is running on http://localhost:3000
+WebSocket available at ws://localhost:3000/ws
+Environment: development
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+Server is running on http://localhost:3000
+WebSocket available at ws://localhost:3000/ws
+Environment: development
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+Server is running on http://localhost:3000
+WebSocket available at ws://localhost:3000/ws
+Environment: development
+[2026-01-01T19:39:35.907Z] GET /api/admin/users?search=&page=1&pageSize=30
+[2026-01-01T19:51:08.322Z] GET /api/admin/users?search=&page=1&pageSize=30
+[2026-01-01T19:51:19.078Z] GET /api/admin/users?search=&page=1&pageSize=30
+[2026-01-01T19:51:29.063Z] GET /api/admin/users?search=&page=1&pageSize=30
+[2026-01-01T19:51:39.052Z] GET /api/admin/users?search=&page=1&pageSize=30
+[2026-01-01T19:51:49.133Z] GET /api/admin/users?search=&page=1&pageSize=30
+[2026-01-01T19:51:58.707Z] GET /api/admin/users?search=&page=1&pageSize=30
+OSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCAssertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDSQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // UnAssertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDSQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+Server is running on http://localhost:3000
+WebSocket available at ws://localhost:3000/ws
+Environment: development
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      Restarting 'src/server.js'
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...
+Restarting 'src/server.js'
+SQLite database initialized
+[WebSocket] Server initialized on /ws
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at start (D:\Projects\peekachoo\peekachoo-backend\src\server.js:25:12)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:508:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v24.11.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+Failed running 'src/server.js'. Waiting for file changes before restarting...

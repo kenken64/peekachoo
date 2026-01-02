@@ -983,19 +983,22 @@ Child html-webpack-plugin for "..\index.html":
      1 asset
        4 modules
 [Browsersync] Reloading Browsers...
-1092] ./src/objects/all-points.ts 13.3 kB {0} [built]
-[1093] ./src/objects/info.ts 2.85 kB {0} [built]
-[1095] ./src/objects/debug.ts 7.05 kB {0} [built]
-[1097] ./src/objects/levels.ts 824 bytes {0} [built]
-[1099] ./src/objects/sparkies.ts 1.87 kB {0} [built]
-[1100] ./src/objects/sparky.ts 7.49 kB {0} [built]
-[1102] ./src/objects/qixes.ts 1.77 kB {0} [built]
-[1103] ./src/objects/qix.ts 6.45 kB {0} [built]
-    + 1100 hidden modules
+Hash: f4d2e617bfa3725287d6
+Version: webpack 3.11.0
+Time: 1292ms
+        Asset     Size  Chunks                    Chunk Names
+    bundle.js   753 kB       0  [emitted]  [big]  app
+bundle.js.map   895 kB       0  [emitted]         app
+../index.html  2.21 kB          [emitted]         
+ + 2 hidden assets
+  [24] ./src/main.ts 6.98 kB {0} [built]
+[1083] ./src/scenes/menu-scene.ts 38 kB {0} [built]
+    + 1111 hidden modules
 Child html-webpack-plugin for "..\index.html":
      1 asset
        4 modules
 [Browsersync] Reloading Browsers...
+rowsers...
 Hash: eb43872b9bd07c1a7799
 Version: webpack 3.11.0
 Time: 1506ms
@@ -1123,21 +1126,23 @@ bundle.js.map   895 kB       0  [emitted]         app
 [1103] ./src/objects/qix.ts 6.45 kB {0} [built]
     + 1100 hidden modules
 Child html-webpack-plugin for "..\index.html":
-     1 asset[Browsersync] Relo[Browsersync] Reloading Browsers...
-  app
+     1 asset[Browsersync] Relo[Browsersync] ReloHash: 9af97d2414dc646e2163
+Version: webpack 3.11.0
+Time: 1290ms
+        Asset     Size  Chunks                    Chunk Names
+    bundle.js   753 kB       0  [emitted]  [big]  app
+bundle.js.map   895 kB       0  [emitted]         app
 ../index.html  2.21 kB          [emitted]         
  + 2 hidden assets
- [131] ./src/services/websocket-service.ts 9.69 kB {0} [built]
-[1081] ./src/scenes/login-scene.ts 25.1 kB {0} [built]
-[1082] ./src/services/notification-manager.ts 18.2 kB {0} [built]
-[1083] ./src/scenes/menu-scene.ts 37.8 kB {0} [built]
-[1086] ./src/scenes/qix-scene.ts 60.3 kB {0} [built]
-    + 1108 hidden modules
+  [24] ./src/main.ts 6.98 kB {0} [built]
+[1083] ./src/scenes/menu-scene.ts 38 kB {0} [built]
+    + 1111 hidden modules
 Child html-webpack-plugin for "..\index.html":
      1 asset
        4 modules
 [Browsersync] Reloading Browsers...
-Hash:Hash: 7237351353cce55a3894
+ading Browsers...
+4
 Version: webpack 3.11.0
 Time: 1427ms
         Asset     Size  Chunks                    Chunk Names
@@ -1470,4 +1475,17 @@ Child html-webpack-plugin for "..\index.html":
      1 asset
        4 modules
 [Browsersync] Reloading Browsers...
-s...
+Hash:Hash: e0c0c2b42877096b621e
+Version: webpack 3.11.0
+Time: 1218ms
+        Asset     Size  Chunks                    Chunk Names
+    bundle.js   753 kB       0  [emitted]  [big]  app
+bundle.js.map   895 kB       0  [emitted]         app
+../index.html  2.21 kB          [emitted]         
+ + 2 hidden assets
+  [24] ./src/main.ts 6.98 kB {0} [built]
+[1083] ./src/scenes/menu-scene.ts 38 kB {0} [built]
+    + 1111 hidden modules
+Child html-webpack-plugin for "..\index.html":
+     1 asset
+       4 mod[Brow[Browsersync] Reloading Browsers...
