@@ -151,17 +151,17 @@ flowchart TB
         Scenes --> FServices
     end
 
-    subgraph Network["HTTP & WebSocket (Port 3000)"]
+    subgraph Network["HTTP & WebSocket - Port 3000"]
         API[REST API]
         WS[WebSocket]
     end
 
     subgraph Backend["BACKEND (Server - Port 3000)"]
         subgraph Routes["Express Routes"]
-            R1[/api/auth/*]
-            R2[/api/games/*]
-            R3[/api/stats/*]
-            R4[/api/leaderboard/*]
+            R1["api/auth"]
+            R2["api/games"]
+            R3["api/stats"]
+            R4["api/leaderboard"]
         end
 
         subgraph Controllers["Controllers"]
@@ -183,9 +183,9 @@ flowchart TB
     end
 
     AS -->|POST| R1
-    GS -->|GET/POST| R2
+    GS -->|GET,POST| R2
     SS -->|GET| R3
-    LBS -->|GET/POST| R4
+    LBS -->|GET,POST| R4
     WSS <-->|WebSocket| WSvc
 ```
 
