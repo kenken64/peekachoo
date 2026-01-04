@@ -2,6 +2,10 @@
 
 A browser-based territory capture game inspired by the classic arcade game **Qix**. Players claim territory on a game board to progressively reveal hidden Pokemon images.
 
+[![Demo Video](https://img.youtube.com/vi/LgnAFFXq-aA/0.jpg)](https://youtu.be/LgnAFFXq-aA)
+
+▶️ **[Watch Demo Video](https://youtu.be/LgnAFFXq-aA)**
+
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green)
 ![Phaser](https://img.shields.io/badge/Phaser-3.10.1-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-4.9.5-blue)
