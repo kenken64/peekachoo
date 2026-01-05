@@ -7,6 +7,7 @@ $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ProjectDir = Split-Path -Parent $ScriptDir
 $FrontendDir = Join-Path $ProjectDir "peekachoo-frontend"
 $BackendDir = Join-Path $ProjectDir "peekachoo-backend"
+$AdminDir = Join-Path $ProjectDir "peekachoo-admin"
 $PidDir = Join-Path $ScriptDir ".pids"
 
 Write-Host "========================================" -ForegroundColor Green
@@ -21,6 +22,11 @@ if (-not (Test-Path $FrontendDir)) {
 
 if (-not (Test-Path $BackendDir)) {
     Write-Host "Error: Backend directory not found at $BackendDir" -ForegroundColor Red
+    exit 1
+}
+
+if (-not (Test-Path $AdminDir)) {
+    Write-Host "Error: Admin directory not found at $AdminDir" -ForegroundColor Red
     exit 1
 }
 
@@ -46,7 +52,7 @@ if (-not (Test-Path ".env") -and (Test-Path ".env.example")) {
 }
 
 $BackendLog = Join-Path $PidDir "backend.log"
-$BackendProcess = Start-Process -FilePath "npm" -ArgumentList "run", "dev" -WindowStyle Hidden -PassThru -RedirectStandardOutput $BackendLog -RedirectStandardError (Join-Path $PidDir "backend.error.log")
+$BackendProcess = Start-Process -FilePath "npm.cmd" -ArgumentList "run", "dev" -WindowStyle Hidden -PassThru -RedirectStandardOutput $BackendLog -RedirectStandardError (Join-Path $PidDir "backend.error.log")
 $BackendProcess.Id | Out-File (Join-Path $PidDir "backend.pid")
 Write-Host "Backend started with PID: $($BackendProcess.Id)" -ForegroundColor Green
 
@@ -64,9 +70,24 @@ if (-not (Test-Path "node_modules")) {
 }
 
 $FrontendLog = Join-Path $PidDir "frontend.log"
-$FrontendProcess = Start-Process -FilePath "npm" -ArgumentList "run", "dev" -WindowStyle Hidden -PassThru -RedirectStandardOutput $FrontendLog -RedirectStandardError (Join-Path $PidDir "frontend.error.log")
+$FrontendProcess = Start-Process -FilePath "npm.cmd" -ArgumentList "run", "dev" -WindowStyle Hidden -PassThru -RedirectStandardOutput $FrontendLog -RedirectStandardError (Join-Path $PidDir "frontend.error.log")
 $FrontendProcess.Id | Out-File (Join-Path $PidDir "frontend.pid")
 Write-Host "Frontend started with PID: $($FrontendProcess.Id)" -ForegroundColor Green
+
+# Start Admin
+Write-Host "Starting Admin..." -ForegroundColor Yellow
+Set-Location $AdminDir
+
+# Check if node_modules exists
+if (-not (Test-Path "node_modules")) {
+    Write-Host "Installing admin dependencies..." -ForegroundColor Yellow
+    npm install
+}
+
+$AdminLog = Join-Path $PidDir "admin.log"
+$AdminProcess = Start-Process -FilePath "npm.cmd" -ArgumentList "run", "dev" -WindowStyle Hidden -PassThru -RedirectStandardOutput $AdminLog -RedirectStandardError (Join-Path $PidDir "admin.error.log")
+$AdminProcess.Id | Out-File (Join-Path $PidDir "admin.pid")
+Write-Host "Admin started with PID: $($AdminProcess.Id)" -ForegroundColor Green
 
 Set-Location $ProjectDir
 
@@ -81,10 +102,14 @@ Write-Host " (API)"
 Write-Host "Frontend: " -NoNewline
 Write-Host "http://localhost:3000" -ForegroundColor Yellow -NoNewline
 Write-Host " (Game)"
+Write-Host "Admin:    " -NoNewline
+Write-Host "http://localhost:3001" -ForegroundColor Yellow -NoNewline
+Write-Host " (Admin)"
 Write-Host ""
 Write-Host "Logs:"
 Write-Host "  Backend:  $BackendLog"
 Write-Host "  Frontend: $FrontendLog"
+Write-Host "  Admin:    $AdminLog"
 Write-Host ""
 Write-Host "Run " -NoNewline
 Write-Host ".\scripts\stop.ps1" -ForegroundColor Yellow -NoNewline

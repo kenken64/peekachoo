@@ -1,5 +1,5 @@
 # Peekachoo Stop Script (PowerShell)
-# Stops both frontend and backend servers
+# Stops frontend, backend, and admin servers
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ProjectDir = Split-Path -Parent $ScriptDir
@@ -17,17 +17,17 @@ function Stop-Service {
     $PidFile = Join-Path $PidDir "$ServiceName.pid"
 
     if (Test-Path $PidFile) {
-        $Pid = Get-Content $PidFile
+        $ServicePid = Get-Content $PidFile
         try {
-            $Process = Get-Process -Id $Pid -ErrorAction SilentlyContinue
+            $Process = Get-Process -Id $ServicePid -ErrorAction SilentlyContinue
             if ($Process) {
-                Write-Host "Stopping $ServiceName (PID: $Pid)..." -ForegroundColor Yellow
-                Stop-Process -Id $Pid -Force -ErrorAction SilentlyContinue
+                Write-Host "Stopping $ServiceName (PID: $ServicePid)..." -ForegroundColor Yellow
+                Stop-Process -Id $ServicePid -Force -ErrorAction SilentlyContinue
 
                 # Wait for process to terminate
                 $timeout = 10
                 while ($timeout -gt 0) {
-                    $Process = Get-Process -Id $Pid -ErrorAction SilentlyContinue
+                    $Process = Get-Process -Id $ServicePid -ErrorAction SilentlyContinue
                     if (-not $Process) {
                         break
                     }
@@ -48,6 +48,9 @@ function Stop-Service {
     }
 }
 
+# Stop Admin
+Stop-Service -ServiceName "admin"
+
 # Stop Frontend first
 Stop-Service -ServiceName "frontend"
 
@@ -57,9 +60,9 @@ Stop-Service -ServiceName "backend"
 # Also kill any remaining node processes on common ports
 Write-Host "Cleaning up any remaining processes..." -ForegroundColor Yellow
 
-# Kill processes on port 3000
+# Kill processes on port 3000 and 3001
 try {
-    $connections = Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue
+    $connections = Get-NetTCPConnection -LocalPort 3000,3001 -ErrorAction SilentlyContinue
     foreach ($conn in $connections) {
         Stop-Process -Id $conn.OwningProcess -Force -ErrorAction SilentlyContinue
     }
