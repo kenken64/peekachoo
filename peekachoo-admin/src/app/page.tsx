@@ -541,7 +541,7 @@ export default function AdminPage() {
               <div>
                 <h3 className="text-lg font-medium text-white mb-1">Sync Pokemon Database</h3>
                 <p className="text-gray-400 text-sm">
-                  Fetch latest Pokemon data (including Japanese names) from PokeAPI.
+                  Fetch latest Pokemon data (including Japanese and Chinese names) from PokeAPI.
                   This process runs in batches to avoid timeouts.
                 </p>
               </div>
