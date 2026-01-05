@@ -60,8 +60,15 @@ flowchart TB
             SessionStore["Session Store<br/>(Memory)"]
             WebSocketService["WebSocket Service<br/>(Live Updates)"]
             NotificationManager["Notification Manager<br/>(Pop-up Msgs)"]
+            I18nService["I18n Service<br/>(Translations)"]
         end
         Scenes --> Services
+    end
+
+    subgraph Admin["Admin Panel (Port 3002) - Next.js"]
+        AdminDashboard["Dashboard"]
+        UserMgmt["User Management"]
+        Analytics["Analytics"]
     end
 
     subgraph Backend["Backend (Port 3000) - Server"]
@@ -70,6 +77,7 @@ flowchart TB
             LeaderboardController["Leaderboard Controller<br/>(Rankings)"]
             StatsController["Stats Controller<br/>(Player Data)"]
             AchievementController["Achievement Controller<br/>(Badges)"]
+            AdminController["Admin Controller<br/>(Management)"]
         end
         subgraph BackendServices["Services"]
             ScoreService["Score Service<br/>(Calculate)"]
@@ -80,6 +88,7 @@ flowchart TB
     end
 
     Frontend <-->|"HTTP & WebSocket"| Backend
+    Admin <-->|"HTTP (Admin API)"| Backend
 ```
 
 ### How They Work Together
@@ -118,6 +127,14 @@ flowchart TB
 | **SimpleWebAuthn** | A library that handles passkey authentication (fingerprint/face login). |
 | **ws** | A library for WebSocket connections (real-time communication). |
 | **JWT** | Creates secure tokens that prove a user is logged in. |
+
+### Admin Panel (Management Dashboard)
+
+| Technology | What It Does |
+|------------|--------------|
+| **Next.js** | A React framework for building fast web applications. Used for the admin interface. |
+| **Tailwind CSS** | A utility-first CSS framework for rapid UI styling. |
+| **TypeScript** | Ensures type safety and code quality. |
 
 ---
 
@@ -404,6 +421,24 @@ sequenceDiagram
 
 ---
 
+## Internationalization (i18n)
+
+> **In Simple Terms:**
+> The game supports multiple languages so players from different countries can play in their native language.
+
+### Supported Languages
+- 🇺🇸 **English** (`en`) - Default
+- 🇯🇵 **Japanese** (`ja`)
+- 🇵🇭 **Filipino** (`fil`)
+
+### How It Works
+1. **Selection**: Players choose a language from the Main Menu.
+2. **Storage**: The preference is saved in the browser (`localStorage`).
+3. **Loading**: The `I18nService` loads a JSON file containing all text for that language.
+4. **Display**: Game text is dynamically replaced (e.g., "Start Game" becomes "Simulan ang Laro" or "ゲーム開始").
+
+---
+
 ## Authentication Flow
 
 > **In Simple Terms:**
@@ -561,6 +596,24 @@ Each level gets harder:
 │     Wrong Answer = Try Again (unlimited attempts)            │
 └─────────────────────────────────────────────────────────────┘
 ```
+
+### Power Up System (Shields)
+
+> **In Simple Terms:**
+> Players can purchase temporary immunity shields using their accumulated score points.
+
+- **Cost**: 100 points per shield use.
+- **Duration**: 6 seconds of invulnerability.
+- **Visuals**: Player turns cyan and emits a glowing aura.
+- **Usage**:
+    - **Desktop**: Press 'S' key.
+    - **Mobile**: Tap the Shield button icon on screen.
+
+**Mechanics:**
+1. Player buys shields in the Main Menu (Store).
+2. During gameplay, player activates shield.
+3. Player is immune to "Sparky" (border enemies) and "Qix" (drawing enemies) for 6s.
+4. Shield count decreases by 1 locally and on the server.
 
 ---
 
