@@ -53,6 +53,11 @@ export default function AdminPage() {
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
 
+  // Pokemon Sync State
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncProgress, setSyncProgress] = useState('');
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'success' | 'error'>('idle');
+
   // Search and pagination state
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -185,6 +190,56 @@ export default function AdminPage() {
       alert('Failed to delete user');
     } finally {
       setActionLoading(false);
+    }
+  };
+
+  const handleSyncPokemon = async () => {
+    if (isSyncing) return;
+    
+    if (!confirm('This will sync all Pokemon data from PokeAPI. This process may take several minutes. Do you want to continue?')) {
+      return;
+    }
+
+    setIsSyncing(true);
+    setSyncStatus('syncing');
+    setSyncProgress('Starting sync...');
+
+    try {
+      // Total Pokemon estimate
+      const totalPokemon = 1350;
+      const batchSize = 50;
+      let syncedCount = 0;
+
+      for (let offset = 0; offset < totalPokemon; offset += batchSize) {
+        setSyncProgress(`Syncing batch ${offset + 1}-${Math.min(offset + batchSize, totalPokemon)}...`);
+        
+        const res = await fetch('/api/pokemon/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ limit: batchSize, offset }),
+        });
+
+        if (!res.ok) {
+          throw new Error(`Failed to sync batch at offset ${offset}`);
+        }
+
+        const data = await res.json();
+        syncedCount += data.data?.inserted + data.data?.updated || 0;
+        
+        // If we got fewer items than requested, we might be done
+        if (data.data?.totalAvailable && offset + batchSize >= data.data.totalAvailable) {
+          break;
+        }
+      }
+
+      setSyncStatus('success');
+      setSyncProgress(`Successfully synced ${syncedCount} Pokemon!`);
+    } catch (err: any) {
+      console.error('Sync failed:', err);
+      setSyncStatus('error');
+      setSyncProgress(`Sync failed: ${err.message}`);
+    } finally {
+      setIsSyncing(false);
     }
   };
 
@@ -472,6 +527,61 @@ export default function AdminPage() {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Pokemon Management Section */}
+        <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 mt-8">
+          <div className="px-6 py-4 border-b border-gray-700 bg-gray-900/50">
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <span>👾</span> Pokemon Management
+            </h2>
+          </div>
+          <div className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-medium text-white mb-1">Sync Pokemon Database</h3>
+                <p className="text-gray-400 text-sm">
+                  Fetch latest Pokemon data (including Japanese names) from PokeAPI.
+                  This process runs in batches to avoid timeouts.
+                </p>
+              </div>
+              <button
+                onClick={handleSyncPokemon}
+                disabled={isSyncing}
+                className={`px-4 py-2 rounded font-medium transition-colors flex items-center gap-2 ${
+                  isSyncing
+                    ? 'bg-gray-600 cursor-not-allowed text-gray-300'
+                    : 'bg-purple-600 hover:bg-purple-500 text-white'
+                }`}
+              >
+                {isSyncing ? (
+                  <>
+                    <span className="animate-spin">↻</span> Syncing...
+                  </>
+                ) : (
+                  <>
+                    <span>↻</span> Sync Pokemon
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Sync Status */}
+            {(syncStatus !== 'idle' || syncProgress) && (
+              <div className={`mt-4 p-4 rounded border ${
+                syncStatus === 'error' ? 'bg-red-900/20 border-red-800 text-red-200' :
+                syncStatus === 'success' ? 'bg-green-900/20 border-green-800 text-green-200' :
+                'bg-blue-900/20 border-blue-800 text-blue-200'
+              }`}>
+                <div className="flex items-center gap-2">
+                  {syncStatus === 'syncing' && <span className="animate-pulse">●</span>}
+                  {syncStatus === 'success' && <span>✓</span>}
+                  {syncStatus === 'error' && <span>⚠</span>}
+                  <span className="font-mono text-sm">{syncProgress}</span>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Footer */}

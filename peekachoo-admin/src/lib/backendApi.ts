@@ -113,3 +113,11 @@ export async function getUserCount() {
   const response = await fetchBackend<CountResponse>('/users/count');
   return response.data.total;
 }
+
+export async function syncPokemon(limit: number = 50, offset: number = 0) {
+  const response = await fetchBackend<{ success: boolean; message: string; data: any }>('/pokemon/sync', {
+    method: 'POST',
+    body: JSON.stringify({ limit, offset }),
+  });
+  return response;
+}
