@@ -80,7 +80,7 @@ export default function AdminPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [sortConfig, setSortConfig] = useState<{key: string; direction: 'asc' | 'desc'}>({
-    key: 'created_at',
+    key: 'total_spent',
     direction: 'desc'
   });
   const pageSize = 30;
