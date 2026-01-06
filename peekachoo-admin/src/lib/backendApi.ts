@@ -6,6 +6,8 @@ interface BackendUser {
   display_name: string | null;
   created_at: string;
   updated_at: string;
+  total_shields_purchased?: number;
+  total_spent?: number;
 }
 
 interface PaginationInfo {
@@ -17,10 +19,16 @@ interface PaginationInfo {
   hasPrev: boolean;
 }
 
+interface GlobalStats {
+  totalShields: number;
+  totalRevenue: number;
+}
+
 interface UsersResponse {
   success: boolean;
   data: {
     users: BackendUser[];
+    globalStats?: GlobalStats;
     pagination: PaginationInfo;
   };
   error?: string;
@@ -84,7 +92,10 @@ export async function getUsers(search: string = '', page: number = 1, pageSize: 
       displayName: user.display_name,
       createdAt: user.created_at,
       updatedAt: user.updated_at,
+      totalShields: user.total_shields_purchased || 0,
+      totalSpent: user.total_spent || 0,
     })),
+    globalStats: response.data.globalStats || { totalShields: 0, totalRevenue: 0 },
     pagination: response.data.pagination,
   };
 }

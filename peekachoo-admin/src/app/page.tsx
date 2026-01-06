@@ -1,6 +1,11 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Label } from '@/components/ui/label';
 
 interface User {
   id: string;
@@ -8,6 +13,8 @@ interface User {
   display_name: string | null;
   created_at: string;
   updated_at: string;
+  total_shields_purchased?: number;
+  total_spent?: number;
 }
 
 // Retro Counter Component
@@ -20,7 +27,7 @@ function RetroCounter({ value, label }: { value: number; label: string }) {
         {digits.map((digit, index) => (
           <div
             key={index}
-            className="w-10 h-14 bg-black border-2 border-gray-600 rounded flex items-center justify-center shadow-inner"
+            className="w-10 h-14 bg-black border-2 border-slate-600 rounded flex items-center justify-center shadow-inner"
             style={{
               boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,255,0,0.3)',
             }}
@@ -38,7 +45,7 @@ function RetroCounter({ value, label }: { value: number; label: string }) {
           </div>
         ))}
       </div>
-      <span className="text-gray-400 text-sm mt-2 uppercase tracking-wider">{label}</span>
+      <span className="text-muted-foreground text-sm mt-2 uppercase tracking-wider">{label}</span>
     </div>
   );
 }
@@ -50,6 +57,7 @@ export default function AdminPage() {
   const [error, setError] = useState('');
   const [users, setUsers] = useState<User[]>([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [totalShieldsSold, setTotalShieldsSold] = useState(0);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
 
@@ -86,6 +94,7 @@ export default function AdminPage() {
         const data = await res.json();
         setUsers(data.users);
         setTotalCount(data.totalCount);
+        setTotalShieldsSold(data.globalStats?.totalShields || 0);
         setTotalPages(data.totalPages);
       } else if (res.status === 401) {
         setIsAuthenticated(false);
@@ -283,8 +292,8 @@ export default function AdminPage() {
 
   if (isLoading && !isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-foreground text-xl">Loading...</div>
       </div>
     );
   }
@@ -292,286 +301,272 @@ export default function AdminPage() {
   // Login Form
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
-        <div className="bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-md">
-          <h1 className="text-2xl font-bold text-white mb-6 text-center">
-            Peekachoo Admin
-          </h1>
-          <form onSubmit={handleLogin}>
-            <div className="mb-4">
-              <label className="block text-gray-300 text-sm font-medium mb-2">
-                Admin Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter admin password"
-                required
-              />
-            </div>
-            {error && (
-              <div className="mb-4 p-3 bg-red-900/50 border border-red-500 rounded-lg text-red-300 text-sm">
-                {error}
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="text-2xl text-center">Peekachoo Admin</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin}>
+              <div className="grid w-full items-center gap-4">
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="password">Admin Password</Label>
+                  <Input 
+                    id="password" 
+                    type="password" 
+                    placeholder="Enter admin password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+                {error && (
+                  <div className="p-3 bg-destructive/20 border border-destructive rounded-lg text-destructive-foreground text-sm">
+                    {error}
+                  </div>
+                )}
+                <Button type="submit" disabled={actionLoading} className="w-full">
+                  {actionLoading ? 'Logging in...' : 'Login'}
+                </Button>
               </div>
-            )}
-            <button
-              type="submit"
-              disabled={actionLoading}
-              className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors"
-            >
-              {actionLoading ? 'Logging in...' : 'Login'}
-            </button>
-          </form>
-        </div>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   // Admin Dashboard
   return (
-    <div className="min-h-screen bg-gray-900 p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-background p-4 md:p-8">
+      <div className="max-w-6xl mx-auto space-y-8">
         {/* Header with Retro Counter */}
-        <div className="flex flex-col items-center mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-6">
+        <div className="flex flex-col items-center gap-6">
+          <h1 className="text-2xl md:text-3xl font-bold">
             Peekachoo Admin
           </h1>
 
           {/* Retro User Counter */}
-          <div className="bg-gray-800 rounded-lg p-6 shadow-xl border border-gray-700 mb-6">
-            <RetroCounter value={totalCount} label="Total Registered Users" />
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Card className="p-6 bg-card">
+              <RetroCounter value={totalCount} label="Total Registered Users" />
+            </Card>
+            <Card className="p-6 bg-card">
+              <RetroCounter value={totalShieldsSold} label="Total Shields Sold" />
+            </Card>
           </div>
 
           {/* Action Buttons */}
           <div className="flex gap-3">
-            <button
+            <Button
+              variant="secondary"
               onClick={loadUsers}
               disabled={isLoading}
-              className="px-4 py-2 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 text-white rounded-lg transition-colors"
             >
               {isLoading ? 'Refreshing...' : 'Refresh'}
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="destructive"
               onClick={handleLogout}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
             >
               Logout
-            </button>
+            </Button>
           </div>
         </div>
 
         {/* Search Bar */}
-        <div className="mb-6">
-          <form onSubmit={handleSearch} className="flex gap-3">
-            <input
+        <div className="flex gap-3">
+          <form onSubmit={handleSearch} className="flex gap-3 w-full">
+            <Input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by username..."
-              className="flex-1 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1"
             />
-            <button
-              type="submit"
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-            >
+            <Button type="submit">
               Search
-            </button>
+            </Button>
             {searchQuery && (
-              <button
+              <Button
+                variant="outline"
                 type="button"
                 onClick={() => {
                   setSearchQuery('');
                   setCurrentPage(1);
                 }}
-                className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
               >
                 Clear
-              </button>
+              </Button>
             )}
           </form>
         </div>
 
         {/* Users Table */}
-        <div className="bg-gray-800 rounded-lg shadow-xl overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-700">
-                <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                    Username
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                    Display Name
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider hidden md:table-cell">
-                    Created At
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider hidden lg:table-cell">
-                    User ID
-                  </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-700">
+        <Card>
+          <div className="overflow-hidden rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Username</TableHead>
+                  <TableHead>Display Name</TableHead>
+                  <TableHead className="text-right">Shields</TableHead>
+                  <TableHead className="text-right">Spent</TableHead>
+                  <TableHead className="hidden md:table-cell">Created At</TableHead>
+                  <TableHead className="hidden lg:table-cell">User ID</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {users.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="px-4 py-8 text-center text-gray-400">
+                  <TableRow>
+                    <TableCell colSpan={7} className="h-24 text-center">
                       {isLoading ? 'Loading users...' : searchQuery ? 'No users found matching your search' : 'No users found'}
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ) : (
                   users.map((user) => (
-                    <tr key={user.id} className="hover:bg-gray-750">
-                      <td className="px-4 py-4 whitespace-nowrap">
-                        <span className="text-white font-medium">{user.username}</span>
-                      </td>
-                      <td className="px-4 py-4 whitespace-nowrap">
-                        <span className="text-gray-300">{user.display_name || '-'}</span>
-                      </td>
-                      <td className="px-4 py-4 whitespace-nowrap hidden md:table-cell">
-                        <span className="text-gray-400 text-sm">{formatDate(user.created_at)}</span>
-                      </td>
-                      <td className="px-4 py-4 whitespace-nowrap hidden lg:table-cell">
-                        <span className="text-gray-500 text-xs font-mono">{user.id.substring(0, 8)}...</span>
-                      </td>
-                      <td className="px-4 py-4 whitespace-nowrap text-right">
+                    <TableRow key={user.id}>
+                      <TableCell className="font-medium">{user.username}</TableCell>
+                      <TableCell>{user.display_name || '-'}</TableCell>
+                      <TableCell className="text-right font-mono">{user.total_shields_purchased || 0}</TableCell>
+                      <TableCell className="text-right font-mono text-green-500">${(user.total_spent || 0).toFixed(2)}</TableCell>
+                      <TableCell className="hidden md:table-cell text-muted-foreground">{formatDate(user.created_at)}</TableCell>
+                      <TableCell className="hidden lg:table-cell text-muted-foreground font-mono text-xs">{user.id.substring(0, 8)}...</TableCell>
+                      <TableCell className="text-right">
                         {deleteConfirm === user.id ? (
                           <div className="flex justify-end gap-2">
-                            <button
+                            <Button
+                              size="sm"
+                              variant="destructive"
                               onClick={() => handleDelete(user.id)}
                               disabled={actionLoading}
-                              className="px-3 py-1 bg-red-600 hover:bg-red-700 disabled:bg-red-800 text-white text-sm rounded transition-colors"
                             >
                               {actionLoading ? '...' : 'Confirm'}
-                            </button>
-                            <button
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="secondary"
                               onClick={() => setDeleteConfirm(null)}
-                              className="px-3 py-1 bg-gray-600 hover:bg-gray-500 text-white text-sm rounded transition-colors"
                             >
                               Cancel
-                            </button>
+                            </Button>
                           </div>
                         ) : (
-                          <button
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-destructive hover:text-destructive hover:bg-destructive/10"
                             onClick={() => setDeleteConfirm(user.id)}
-                            className="px-3 py-1 bg-red-600/20 hover:bg-red-600/40 text-red-400 hover:text-red-300 text-sm rounded transition-colors"
                           >
                             Delete
-                          </button>
+                          </Button>
                         )}
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))
                 )}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="bg-gray-700 px-4 py-3 flex items-center justify-between border-t border-gray-600">
-              <div className="text-sm text-gray-400">
+            <div className="px-4 py-3 flex items-center justify-between border-t">
+              <div className="text-sm text-muted-foreground">
                 Showing {((currentPage - 1) * pageSize) + 1} to {Math.min(currentPage * pageSize, totalCount)} of {totalCount} users
               </div>
               <div className="flex gap-1">
-                <button
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => goToPage(1)}
                   disabled={currentPage === 1}
-                  className="px-3 py-1 bg-gray-600 hover:bg-gray-500 disabled:bg-gray-800 disabled:text-gray-600 text-white text-sm rounded transition-colors"
                 >
                   First
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className="px-3 py-1 bg-gray-600 hover:bg-gray-500 disabled:bg-gray-800 disabled:text-gray-600 text-white text-sm rounded transition-colors"
                 >
                   Prev
-                </button>
+                </Button>
 
                 {getPageNumbers().map((page, index) => (
-                  <button
+                  <Button
                     key={index}
+                    variant={page === currentPage ? "default" : "outline"}
+                    size="sm"
                     onClick={() => typeof page === 'number' && goToPage(page)}
                     disabled={page === '...'}
-                    className={`px-3 py-1 text-sm rounded transition-colors ${
-                      page === currentPage
-                        ? 'bg-blue-600 text-white'
-                        : page === '...'
-                        ? 'bg-gray-800 text-gray-500 cursor-default'
-                        : 'bg-gray-600 hover:bg-gray-500 text-white'
-                    }`}
+                    className={page === '...' ? "cursor-default border-none hover:bg-transparent" : ""}
                   >
                     {page}
-                  </button>
+                  </Button>
                 ))}
 
-                <button
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className="px-3 py-1 bg-gray-600 hover:bg-gray-500 disabled:bg-gray-800 disabled:text-gray-600 text-white text-sm rounded transition-colors"
                 >
                   Next
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => goToPage(totalPages)}
                   disabled={currentPage === totalPages}
-                  className="px-3 py-1 bg-gray-600 hover:bg-gray-500 disabled:bg-gray-800 disabled:text-gray-600 text-white text-sm rounded transition-colors"
                 >
                   Last
-                </button>
+                </Button>
               </div>
             </div>
           )}
-        </div>
+        </Card>
 
         {/* Pokemon Management Section */}
-        <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 mt-8">
-          <div className="px-6 py-4 border-b border-gray-700 bg-gray-900/50">
-            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+        <Card>
+          <CardHeader className="border-b bg-muted/20">
+            <CardTitle className="flex items-center gap-2">
               <span>👾</span> Pokemon Management
-            </h2>
-          </div>
-          <div className="p-6">
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-medium text-white mb-1">Sync Pokemon Database</h3>
-                <p className="text-gray-400 text-sm">
+                <h3 className="text-lg font-medium mb-1">Sync Pokemon Database</h3>
+                <p className="text-muted-foreground text-sm">
                   Fetch latest Pokemon data (including Japanese and Chinese names) from PokeAPI.
                   This process runs in batches to avoid timeouts.
                 </p>
               </div>
-              <button
+              <Button
                 onClick={handleSyncPokemon}
                 disabled={isSyncing}
-                className={`px-4 py-2 rounded font-medium transition-colors flex items-center gap-2 ${
-                  isSyncing
-                    ? 'bg-gray-600 cursor-not-allowed text-gray-300'
-                    : 'bg-purple-600 hover:bg-purple-500 text-white'
-                }`}
+                className={isSyncing ? "" : "bg-purple-600 hover:bg-purple-500"}
               >
                 {isSyncing ? (
                   <>
-                    <span className="animate-spin">↻</span> Syncing...
+                    <span className="animate-spin mr-2">↻</span> Syncing...
                   </>
                 ) : (
                   <>
-                    <span>↻</span> Sync Pokemon
+                    <span className="mr-2">↻</span> Sync Pokemon
                   </>
                 )}
-              </button>
+              </Button>
             </div>
 
             {/* Sync Status */}
             {(syncStatus !== 'idle' || syncProgress) && (
-              <div className={`mt-4 p-4 rounded border ${
-                syncStatus === 'error' ? 'bg-red-900/20 border-red-800 text-red-200' :
-                syncStatus === 'success' ? 'bg-green-900/20 border-green-800 text-green-200' :
-                'bg-blue-900/20 border-blue-800 text-blue-200'
+              <div className={`mt-4 p-4 rounded-md border ${
+                syncStatus === 'error' ? 'bg-destructive/20 border-destructive text-destructive' :
+                syncStatus === 'success' ? 'bg-green-500/20 border-green-500 text-green-500' :
+                'bg-blue-500/20 border-blue-500 text-blue-500'
               }`}>
                 <div className="flex items-center gap-2">
                   {syncStatus === 'syncing' && <span className="animate-pulse">●</span>}
@@ -581,11 +576,11 @@ export default function AdminPage() {
                 </div>
               </div>
             )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Footer */}
-        <div className="mt-6 text-center text-gray-500 text-sm">
+        <div className="text-center text-muted-foreground text-sm">
           Peekachoo Admin Panel • Auto-refreshes every 10 seconds
         </div>
       </div>

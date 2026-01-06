@@ -35,9 +35,12 @@ export async function GET(request: NextRequest) {
         display_name: user.displayName,
         created_at: user.createdAt,
         updated_at: user.updatedAt,
+        total_shields_purchased: user.totalShields,
+        total_spent: user.totalSpent,
       })),
       totalCount: result.pagination.total,
       totalPages: result.pagination.totalPages,
+      globalStats: result.globalStats,
     });
   } catch (error) {
     console.error('Error fetching users:', error);
