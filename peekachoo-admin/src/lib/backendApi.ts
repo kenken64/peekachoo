@@ -106,6 +106,9 @@ export async function getUsers(
       updatedAt: user.updated_at,
       totalShields: user.total_shields_purchased || 0,
       totalSpent: user.total_spent || 0,
+      monthlySpent: user.monthly_spent || 0,
+      firstPurchaseDate: user.first_purchase_date,
+      purchaseResetDate: user.purchase_reset_date,
     })),
     globalStats: response.data.globalStats || { totalShields: 0, totalRevenue: 0 },
     pagination: response.data.pagination,
@@ -143,4 +146,19 @@ export async function syncPokemon(limit: number = 50, offset: number = 0) {
     body: JSON.stringify({ limit, offset }),
   });
   return response;
+}
+
+export interface Purchase {
+  id: string;
+  quantity: number;
+  amount_sgd: number;
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  status: string;
+  created_at: string;
+}
+
+export async function getUserPurchases(userId: string): Promise<Purchase[]> {
+  const response = await fetchBackend<{ purchases: Purchase[] }>(`/users/${userId}/purchases`);
+  return response.purchases;
 }

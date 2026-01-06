@@ -65,6 +65,11 @@ export default function AdminPage() {
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
 
+  // Purchase history modal state
+  const [purchaseHistoryUser, setPurchaseHistoryUser] = useState<User | null>(null);
+  const [purchaseHistory, setPurchaseHistory] = useState<any[]>([]);
+  const [purchaseHistoryLoading, setPurchaseHistoryLoading] = useState(false);
+
   // Pokemon Sync State
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncProgress, setSyncProgress] = useState('');
@@ -223,6 +228,30 @@ export default function AdminPage() {
     } finally {
       setActionLoading(false);
     }
+  };
+
+  const handleShowPurchaseHistory = async (user: User) => {
+    setPurchaseHistoryUser(user);
+    setPurchaseHistoryLoading(true);
+    try {
+      const res = await fetch(`/api/users/${user.id}/purchases`);
+      if (res.ok) {
+        const data = await res.json();
+        setPurchaseHistory(data.purchases || []);
+      } else {
+        setPurchaseHistory([]);
+      }
+    } catch (err) {
+      console.error('Failed to fetch purchase history:', err);
+      setPurchaseHistory([]);
+    } finally {
+      setPurchaseHistoryLoading(false);
+    }
+  };
+
+  const closePurchaseHistoryModal = () => {
+    setPurchaseHistoryUser(null);
+    setPurchaseHistory([]);
   };
 
   const handleSyncPokemon = async () => {
@@ -465,7 +494,7 @@ export default function AdminPage() {
                         className="flex items-center font-bold hover:text-foreground"
                         onClick={() => requestSort('total_spent')}
                       >
-                        Total (USD) {getSortIcon('total_spent')}
+                        Total (SGD) {getSortIcon('total_spent')}
                       </button>
                     </div>
                   </TableHead>
@@ -506,7 +535,14 @@ export default function AdminPage() {
                       <TableCell className="font-medium">{user.username}</TableCell>
                       <TableCell className="text-right font-mono">{user.total_shields_purchased || 0}</TableCell>
                       <TableCell className="text-right font-mono text-blue-500">S${monthlySpent.toFixed(2)}</TableCell>
-                      <TableCell className="text-right font-mono text-green-500">${(user.total_spent || 0).toFixed(2)}</TableCell>
+                      <TableCell className="text-right">
+                        <button
+                          className="font-mono text-green-500 hover:text-green-400 hover:underline cursor-pointer"
+                          onClick={() => handleShowPurchaseHistory(user)}
+                        >
+                          S${(user.total_spent || 0).toFixed(2)}
+                        </button>
+                      </TableCell>
                       <TableCell className="hidden md:table-cell text-muted-foreground">{user.purchase_reset_date ? formatDate(user.purchase_reset_date) : '-'}</TableCell>
                       <TableCell className="hidden md:table-cell text-center">
                         {canPurchase ? (
@@ -668,6 +704,60 @@ export default function AdminPage() {
           Peekachoo Admin Panel • Auto-refreshes every 10 seconds
         </div>
       </div>
+
+      {/* Purchase History Modal */}
+      {purchaseHistoryUser && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" onClick={closePurchaseHistoryModal}>
+          <div className="bg-slate-900 border border-slate-700 rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-white">
+                Purchase History: {purchaseHistoryUser.username}
+              </h3>
+              <button onClick={closePurchaseHistoryModal} className="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            
+            <div className="mb-4 p-3 bg-slate-800 rounded-md">
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div><span className="text-gray-400">Total Spent:</span> <span className="text-green-500 font-mono">S${(purchaseHistoryUser.total_spent || 0).toFixed(2)}</span></div>
+                <div><span className="text-gray-400">Monthly Spent:</span> <span className="text-blue-500 font-mono">S${(purchaseHistoryUser.monthly_spent || 0).toFixed(2)}</span></div>
+                <div><span className="text-gray-400">First Purchase:</span> <span className="text-gray-300">{purchaseHistoryUser.first_purchase_date ? formatDate(purchaseHistoryUser.first_purchase_date) : '-'}</span></div>
+                <div><span className="text-gray-400">Reset Date:</span> <span className="text-yellow-500">{purchaseHistoryUser.purchase_reset_date ? formatDate(purchaseHistoryUser.purchase_reset_date) : '-'}</span></div>
+              </div>
+            </div>
+
+            {purchaseHistoryLoading ? (
+              <div className="text-center py-8 text-gray-400">Loading purchases...</div>
+            ) : purchaseHistory.length === 0 ? (
+              <div className="text-center py-8 text-gray-400">No purchases found</div>
+            ) : (
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-slate-700 text-left">
+                    <th className="py-2 px-2 text-gray-400">Date</th>
+                    <th className="py-2 px-2 text-gray-400 text-center">Qty</th>
+                    <th className="py-2 px-2 text-gray-400 text-right">Amount</th>
+                    <th className="py-2 px-2 text-gray-400">Payment ID</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {purchaseHistory.map((purchase) => (
+                    <tr key={purchase.id} className="border-b border-slate-800 hover:bg-slate-800">
+                      <td className="py-2 px-2 text-gray-300">{formatDate(purchase.created_at)}</td>
+                      <td className="py-2 px-2 text-center text-white font-mono">{purchase.quantity}</td>
+                      <td className="py-2 px-2 text-right text-green-500 font-mono">S${purchase.amount_sgd.toFixed(2)}</td>
+                      <td className="py-2 px-2 text-gray-500 font-mono text-xs">{purchase.razorpay_payment_id?.substring(0, 16) || '-'}...</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+
+            <div className="mt-4 text-right">
+              <Button variant="outline" onClick={closePurchaseHistoryModal}>Close</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
