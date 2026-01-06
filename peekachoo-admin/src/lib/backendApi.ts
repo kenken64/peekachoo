@@ -6,8 +6,12 @@ interface BackendUser {
   display_name: string | null;
   created_at: string;
   updated_at: string;
+  shields?: number;
   total_shields_purchased?: number;
   total_spent?: number;
+  monthly_spent?: number;
+  first_purchase_date?: string | null;
+  purchase_reset_date?: string | null;
 }
 
 interface PaginationInfo {

@@ -13,8 +13,12 @@ interface User {
   display_name: string | null;
   created_at: string;
   updated_at: string;
+  shields?: number;
   total_shields_purchased?: number;
   total_spent?: number;
+  monthly_spent?: number;
+  first_purchase_date?: string | null;
+  purchase_reset_date?: string | null;
 }
 
 // Retro Counter Component
@@ -435,7 +439,6 @@ export default function AdminPage() {
                       Username {getSortIcon('username')}
                     </button>
                   </TableHead>
-                  <TableHead>Display Name</TableHead>
                   <TableHead className="text-right">
                     <div className="flex justify-end">
                       <button 
@@ -450,18 +453,37 @@ export default function AdminPage() {
                     <div className="flex justify-end">
                       <button 
                         className="flex items-center font-bold hover:text-foreground"
+                        onClick={() => requestSort('monthly_spent')}
+                      >
+                        Monthly (SGD) {getSortIcon('monthly_spent')}
+                      </button>
+                    </div>
+                  </TableHead>
+                  <TableHead className="text-right">
+                    <div className="flex justify-end">
+                      <button 
+                        className="flex items-center font-bold hover:text-foreground"
                         onClick={() => requestSort('total_spent')}
                       >
-                        Spent {getSortIcon('total_spent')}
+                        Total (USD) {getSortIcon('total_spent')}
                       </button>
                     </div>
                   </TableHead>
                   <TableHead className="hidden md:table-cell">
                     <button 
                       className="flex items-center font-bold hover:text-foreground"
+                      onClick={() => requestSort('purchase_reset_date')}
+                    >
+                      Reset Date {getSortIcon('purchase_reset_date')}
+                    </button>
+                  </TableHead>
+                  <TableHead className="hidden md:table-cell text-center">Status</TableHead>
+                  <TableHead className="hidden lg:table-cell">
+                    <button 
+                      className="flex items-center font-bold hover:text-foreground"
                       onClick={() => requestSort('created_at')}
                     >
-                      Created At {getSortIcon('created_at')}
+                      Created {getSortIcon('created_at')}
                     </button>
                   </TableHead>
                   <TableHead className="hidden lg:table-cell">User ID</TableHead>
@@ -471,18 +493,29 @@ export default function AdminPage() {
               <TableBody>
                 {users.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="h-24 text-center">
+                    <TableCell colSpan={9} className="h-24 text-center">
                       {isLoading ? 'Loading users...' : searchQuery ? 'No users found matching your search' : 'No users found'}
                     </TableCell>
                   </TableRow>
                 ) : (
-                  users.map((user) => (
+                  users.map((user) => {
+                    const monthlySpent = user.monthly_spent || 0;
+                    const canPurchase = monthlySpent < 50;
+                    return (
                     <TableRow key={user.id}>
                       <TableCell className="font-medium">{user.username}</TableCell>
-                      <TableCell>{user.display_name || '-'}</TableCell>
                       <TableCell className="text-right font-mono">{user.total_shields_purchased || 0}</TableCell>
+                      <TableCell className="text-right font-mono text-blue-500">S${monthlySpent.toFixed(2)}</TableCell>
                       <TableCell className="text-right font-mono text-green-500">${(user.total_spent || 0).toFixed(2)}</TableCell>
-                      <TableCell className="hidden md:table-cell text-muted-foreground">{formatDate(user.created_at)}</TableCell>
+                      <TableCell className="hidden md:table-cell text-muted-foreground">{user.purchase_reset_date ? formatDate(user.purchase_reset_date) : '-'}</TableCell>
+                      <TableCell className="hidden md:table-cell text-center">
+                        {canPurchase ? (
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Allowed</span>
+                        ) : (
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">Limit Hit</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="hidden lg:table-cell text-muted-foreground">{formatDate(user.created_at)}</TableCell>
                       <TableCell className="hidden lg:table-cell text-muted-foreground font-mono text-xs">{user.id.substring(0, 8)}...</TableCell>
                       <TableCell className="text-right">
                         {deleteConfirm === user.id ? (
@@ -515,7 +548,7 @@ export default function AdminPage() {
                         )}
                       </TableCell>
                     </TableRow>
-                  ))
+                  );})
                 )}
               </TableBody>
             </Table>
