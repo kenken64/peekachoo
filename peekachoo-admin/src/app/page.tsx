@@ -590,7 +590,11 @@ export default function AdminPage() {
                 ) : (
                   users.map((user) => {
                     const monthlySpent = user.monthly_spent || 0;
-                    const canPurchase = monthlySpent < 50;
+                    const monthlyLimit = 50;
+                    const minShieldCost = 0.27;
+                    const remainingAllowance = monthlyLimit - monthlySpent;
+                    // User can purchase only if they have enough remaining for at least one shield
+                    const canPurchase = remainingAllowance >= minShieldCost;
                     return (
                     <TableRow key={user.id}>
                       <TableCell className="font-medium">{user.username}</TableCell>
