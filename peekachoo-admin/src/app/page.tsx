@@ -113,6 +113,9 @@ export default function AdminPage() {
       const res = await fetch(`/api/users?${params}`);
       if (res.ok) {
         const data = await res.json();
+        console.log('[DEBUG] loadUsers response:', JSON.stringify(data, null, 2));
+        console.log('[DEBUG] First user monthly_spent:', data.users?.[0]?.monthly_spent);
+        console.log('[DEBUG] First user purchase_reset_date:', data.users?.[0]?.purchase_reset_date);
         setUsers(data.users);
         setTotalCount(data.totalCount);
         setTotalShieldsSold(data.globalStats?.totalShields || 0);
@@ -322,17 +325,21 @@ export default function AdminPage() {
     setPaymentSyncProgress('Fetching payments from Razorpay...');
 
     try {
+      console.log('[DEBUG] Starting payment sync...');
       const res = await fetch('/api/payments/sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
 
+      console.log('[DEBUG] Sync response status:', res.status);
+      
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.error || 'Sync failed');
       }
 
       const data = await res.json();
+      console.log('[DEBUG] Sync response data:', JSON.stringify(data, null, 2));
       const r = data.results;
       
       setPaymentSyncStatus('success');
@@ -341,6 +348,7 @@ export default function AdminPage() {
       );
       
       // Refresh the user list
+      console.log('[DEBUG] Refreshing user list after sync...');
       loadUsers();
     } catch (err: any) {
       console.error('Payment sync failed:', err);
