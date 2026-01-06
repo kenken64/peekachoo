@@ -75,6 +75,11 @@ export default function AdminPage() {
   const [syncProgress, setSyncProgress] = useState('');
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'success' | 'error'>('idle');
 
+  // Payment Sync State
+  const [isPaymentSyncing, setIsPaymentSyncing] = useState(false);
+  const [paymentSyncProgress, setPaymentSyncProgress] = useState('');
+  const [paymentSyncStatus, setPaymentSyncStatus] = useState<'idle' | 'syncing' | 'success' | 'error'>('idle');
+
   // Search and pagination state
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -301,6 +306,47 @@ export default function AdminPage() {
       setSyncProgress(`Sync failed: ${err.message}`);
     } finally {
       setIsSyncing(false);
+    }
+  };
+
+  const handleSyncPayments = async () => {
+    if (isPaymentSyncing) return;
+    
+    if (!confirm('This will sync all payments from Razorpay (last 30 days) and recalculate user totals. Continue?')) {
+      return;
+    }
+
+    setIsPaymentSyncing(true);
+    setPaymentSyncStatus('syncing');
+    setPaymentSyncProgress('Fetching payments from Razorpay...');
+
+    try {
+      const res = await fetch('/api/payments/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Sync failed');
+      }
+
+      const data = await res.json();
+      const r = data.results;
+      
+      setPaymentSyncStatus('success');
+      setPaymentSyncProgress(
+        `Sync complete! Fetched: ${r.fetched}, Created: ${r.created}, Updated: ${r.updated}, Skipped: ${r.skipped}, Users recalculated: ${r.usersRecalculated}${r.errors.length > 0 ? `, Errors: ${r.errors.length}` : ''}`
+      );
+      
+      // Refresh the user list
+      loadUsers();
+    } catch (err: any) {
+      console.error('Payment sync failed:', err);
+      setPaymentSyncStatus('error');
+      setPaymentSyncProgress(`Sync failed: ${err.message}`);
+    } finally {
+      setIsPaymentSyncing(false);
     }
   };
 
@@ -646,6 +692,57 @@ export default function AdminPage() {
               </div>
             </div>
           )}
+        </Card>
+
+        {/* Payment Sync Section */}
+        <Card>
+          <CardHeader className="border-b bg-muted/20">
+            <CardTitle className="flex items-center gap-2">
+              <span>💳</span> Payment Sync
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-medium mb-1">Sync Razorpay Payments</h3>
+                <p className="text-muted-foreground text-sm">
+                  Fetch payments from Razorpay (last 30 days) and reconcile with local database.
+                  This will update purchase records and recalculate user totals.
+                </p>
+              </div>
+              <Button
+                onClick={handleSyncPayments}
+                disabled={isPaymentSyncing}
+                className={isPaymentSyncing ? "" : "bg-green-600 hover:bg-green-500"}
+              >
+                {isPaymentSyncing ? (
+                  <>
+                    <span className="animate-spin mr-2">↻</span> Syncing...
+                  </>
+                ) : (
+                  <>
+                    <span className="mr-2">↻</span> Sync Payments
+                  </>
+                )}
+              </Button>
+            </div>
+
+            {/* Payment Sync Status */}
+            {(paymentSyncStatus !== 'idle' || paymentSyncProgress) && (
+              <div className={`mt-4 p-4 rounded-md border ${
+                paymentSyncStatus === 'error' ? 'bg-destructive/20 border-destructive text-destructive' :
+                paymentSyncStatus === 'success' ? 'bg-green-500/20 border-green-500 text-green-500' :
+                'bg-blue-500/20 border-blue-500 text-blue-500'
+              }`}>
+                <div className="flex items-center gap-2">
+                  {paymentSyncStatus === 'syncing' && <span className="animate-pulse">●</span>}
+                  {paymentSyncStatus === 'success' && <span>✓</span>}
+                  {paymentSyncStatus === 'error' && <span>⚠</span>}
+                  <span className="font-mono text-sm">{paymentSyncProgress}</span>
+                </div>
+              </div>
+            )}
+          </CardContent>
         </Card>
 
         {/* Pokemon Management Section */}
