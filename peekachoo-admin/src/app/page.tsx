@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Label } from '@/components/ui/label';
+import Link from 'next/link';
 
 interface User {
   id: string;
@@ -465,6 +466,11 @@ export default function AdminPage() {
 
           {/* Action Buttons */}
           <div className="flex gap-3">
+            <Link href="/payments">
+              <Button variant="outline">
+                💳 View All Payments
+              </Button>
+            </Link>
             <Button
               variant="secondary"
               onClick={loadUsers}

@@ -158,7 +158,35 @@ export interface Purchase {
   created_at: string;
 }
 
+export interface PaymentWithUser extends Purchase {
+  user_id: string;
+  username: string;
+}
+
 export async function getUserPurchases(userId: string): Promise<Purchase[]> {
   const response = await fetchBackend<{ purchases: Purchase[] }>(`/users/${userId}/purchases`);
   return response.purchases;
+}
+
+export async function getAllPayments(
+  search: string = '',
+  status: string = 'all',
+  page: number = 1,
+  pageSize: number = 50
+) {
+  const params = new URLSearchParams({
+    search,
+    status,
+    page: page.toString(),
+    pageSize: pageSize.toString(),
+  });
+
+  const response = await fetchBackend<{
+    payments: PaymentWithUser[];
+    totalCount: number;
+    totalPages: number;
+    totalRevenue: number;
+  }>(`/payments?${params}`);
+
+  return response;
 }
