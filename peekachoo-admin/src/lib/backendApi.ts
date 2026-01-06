@@ -75,11 +75,19 @@ async function fetchBackend<T>(endpoint: string, options: RequestInit = {}): Pro
   return response.json();
 }
 
-export async function getUsers(search: string = '', page: number = 1, pageSize: number = 30) {
+export async function getUsers(
+  search: string = '', 
+  page: number = 1, 
+  pageSize: number = 30,
+  sortBy: string = 'created_at',
+  sortOrder: 'asc' | 'desc' = 'desc'
+) {
   const params = new URLSearchParams({
     search,
     page: page.toString(),
     pageSize: pageSize.toString(),
+    sortBy,
+    sortOrder
   });
 
   const response = await fetchBackend<UsersResponse>(`/users?${params}`);

@@ -18,12 +18,14 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
     const pageSize = parseInt(searchParams.get('pageSize') || '30', 10);
+    const sortBy = searchParams.get('sortBy') || 'created_at';
+    const sortOrder = (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc';
 
     // Validate pagination params
     const validPage = Math.max(1, page);
     const validPageSize = Math.min(Math.max(1, pageSize), 100); // Max 100 per page
 
-    const result = await getUsers(search, validPage, validPageSize);
+    const result = await getUsers(search, validPage, validPageSize, sortBy, sortOrder);
 
     // Transform to match frontend expected format
     // Frontend expects: { users: [...], totalCount: number, totalPages: number }

@@ -70,6 +70,10 @@ export default function AdminPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [sortConfig, setSortConfig] = useState<{key: string; direction: 'asc' | 'desc'}>({
+    key: 'created_at',
+    direction: 'desc'
+  });
   const pageSize = 30;
 
   // Check authentication status on mount
@@ -87,6 +91,8 @@ export default function AdminPage() {
         search: searchQuery,
         page: currentPage.toString(),
         pageSize: pageSize.toString(),
+        sortBy: sortConfig.key,
+        sortOrder: sortConfig.direction,
       });
 
       const res = await fetch(`/api/users?${params}`);
@@ -104,7 +110,7 @@ export default function AdminPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [isAuthenticated, searchQuery, currentPage]);
+  }, [isAuthenticated, searchQuery, currentPage, sortConfig]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -122,6 +128,19 @@ export default function AdminPage() {
 
     return () => clearInterval(interval);
   }, [isAuthenticated, loadUsers]);
+
+  const requestSort = (key: string) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+  
+  const getSortIcon = (key: string) => {
+      if (sortConfig.key !== key) return <span className="text-muted-foreground/30 ml-2">↕</span>;
+      return sortConfig.direction === 'asc' ? <span className="ml-2">↑</span> : <span className="ml-2">↓</span>;
+  };
 
   const checkAuth = async () => {
     try {
@@ -408,11 +427,43 @@ export default function AdminPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Username</TableHead>
+                  <TableHead>
+                    <button 
+                      className="flex items-center font-bold hover:text-foreground"
+                      onClick={() => requestSort('username')}
+                    >
+                      Username {getSortIcon('username')}
+                    </button>
+                  </TableHead>
                   <TableHead>Display Name</TableHead>
-                  <TableHead className="text-right">Shields</TableHead>
-                  <TableHead className="text-right">Spent</TableHead>
-                  <TableHead className="hidden md:table-cell">Created At</TableHead>
+                  <TableHead className="text-right">
+                    <div className="flex justify-end">
+                      <button 
+                        className="flex items-center font-bold hover:text-foreground"
+                        onClick={() => requestSort('shields')}
+                      >
+                        Shields {getSortIcon('shields')}
+                      </button>
+                    </div>
+                  </TableHead>
+                  <TableHead className="text-right">
+                    <div className="flex justify-end">
+                      <button 
+                        className="flex items-center font-bold hover:text-foreground"
+                        onClick={() => requestSort('total_spent')}
+                      >
+                        Spent {getSortIcon('total_spent')}
+                      </button>
+                    </div>
+                  </TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    <button 
+                      className="flex items-center font-bold hover:text-foreground"
+                      onClick={() => requestSort('created_at')}
+                    >
+                      Created At {getSortIcon('created_at')}
+                    </button>
+                  </TableHead>
                   <TableHead className="hidden lg:table-cell">User ID</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
