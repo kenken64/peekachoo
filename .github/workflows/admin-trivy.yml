@@ -15,6 +15,10 @@ on:
     # Run weekly on Sundays at midnight
     - cron: '0 0 * * 0'
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   trivy-scan:
     name: Trivy Security Scan
