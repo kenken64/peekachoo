@@ -34,11 +34,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run Biome lint
+      - name: Run Biome lint and format check
         run: npx biome check . --reporter=github
-
-      - name: Run Biome format check
-        run: npx biome format --check .
 
       - name: Generate JSON report
         if: always()
