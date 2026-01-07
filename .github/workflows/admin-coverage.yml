@@ -1,0 +1,117 @@
+name: Admin Test Coverage
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'peekachoo-admin/src/**'
+      - 'peekachoo-admin/test/**'
+      - 'peekachoo-admin/package.json'
+      - 'peekachoo-admin/jest.config.js'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'peekachoo-admin/src/**'
+      - 'peekachoo-admin/test/**'
+      - 'peekachoo-admin/package.json'
+      - 'peekachoo-admin/jest.config.js'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  test:
+    name: Run Tests with Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: peekachoo-admin/package-lock.json
+
+      - name: Install dependencies
+        working-directory: peekachoo-admin
+        run: npm ci
+
+      - name: Run tests with coverage
+        working-directory: peekachoo-admin
+        run: npm run test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./peekachoo-admin/coverage/lcov.info
+          flags: admin
+          name: admin-coverage
+          fail_ci_if_error: false
+          verbose: true
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: admin-coverage-report
+          path: peekachoo-admin/coverage/
+          retention-days: 7
+
+      - name: Generate Coverage Summary
+        working-directory: peekachoo-admin
+        run: |
+          echo "## 📊 Admin Test Coverage" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f coverage/coverage-summary.json ]; then
+            LINES=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
+            FUNCTIONS=$(cat coverage/coverage-summary.json | jq '.total.functions.pct')
+            BRANCHES=$(cat coverage/coverage-summary.json | jq '.total.branches.pct')
+            STATEMENTS=$(cat coverage/coverage-summary.json | jq '.total.statements.pct')
+            
+            echo "| Metric | Coverage |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|----------|" >> $GITHUB_STEP_SUMMARY
+            echo "| Lines | ${LINES}% |" >> $GITHUB_STEP_SUMMARY
+            echo "| Functions | ${FUNCTIONS}% |" >> $GITHUB_STEP_SUMMARY
+            echo "| Branches | ${BRANCHES}% |" >> $GITHUB_STEP_SUMMARY
+            echo "| Statements | ${STATEMENTS}% |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Coverage summary not available" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Comment coverage on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let coverage = 'Coverage report not available';
+            
+            try {
+              const summary = JSON.parse(fs.readFileSync('peekachoo-admin/coverage/coverage-summary.json', 'utf8'));
+              const total = summary.total;
+              coverage = `## 📊 Admin Coverage Report
+              
+              | Metric | Coverage |
+              |--------|----------|
+              | Lines | ${total.lines.pct}% |
+              | Functions | ${total.functions.pct}% |
+              | Branches | ${total.branches.pct}% |
+              | Statements | ${total.statements.pct}% |`;
+            } catch (e) {
+              console.log('Could not read coverage summary:', e.message);
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: coverage
+            });

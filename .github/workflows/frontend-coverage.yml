@@ -1,0 +1,117 @@
+name: Frontend Test Coverage
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'peekachoo-frontend/src/**'
+      - 'peekachoo-frontend/test/**'
+      - 'peekachoo-frontend/package.json'
+      - 'peekachoo-frontend/jest.config.js'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'peekachoo-frontend/src/**'
+      - 'peekachoo-frontend/test/**'
+      - 'peekachoo-frontend/package.json'
+      - 'peekachoo-frontend/jest.config.js'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  test:
+    name: Run Tests with Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: peekachoo-frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: peekachoo-frontend
+        run: npm ci
+
+      - name: Run tests with coverage
+        working-directory: peekachoo-frontend
+        run: npm run test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./peekachoo-frontend/coverage/lcov.info
+          flags: frontend
+          name: frontend-coverage
+          fail_ci_if_error: false
+          verbose: true
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage-report
+          path: peekachoo-frontend/coverage/
+          retention-days: 7
+
+      - name: Generate Coverage Summary
+        working-directory: peekachoo-frontend
+        run: |
+          echo "## 📊 Frontend Test Coverage" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f coverage/coverage-summary.json ]; then
+            LINES=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
+            FUNCTIONS=$(cat coverage/coverage-summary.json | jq '.total.functions.pct')
+            BRANCHES=$(cat coverage/coverage-summary.json | jq '.total.branches.pct')
+            STATEMENTS=$(cat coverage/coverage-summary.json | jq '.total.statements.pct')
+            
+            echo "| Metric | Coverage |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|----------|" >> $GITHUB_STEP_SUMMARY
+            echo "| Lines | ${LINES}% |" >> $GITHUB_STEP_SUMMARY
+            echo "| Functions | ${FUNCTIONS}% |" >> $GITHUB_STEP_SUMMARY
+            echo "| Branches | ${BRANCHES}% |" >> $GITHUB_STEP_SUMMARY
+            echo "| Statements | ${STATEMENTS}% |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Coverage summary not available" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Comment coverage on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let coverage = 'Coverage report not available';
+            
+            try {
+              const summary = JSON.parse(fs.readFileSync('peekachoo-frontend/coverage/coverage-summary.json', 'utf8'));
+              const total = summary.total;
+              coverage = `## 📊 Frontend Coverage Report
+              
+              | Metric | Coverage |
+              |--------|----------|
+              | Lines | ${total.lines.pct}% |
+              | Functions | ${total.functions.pct}% |
+              | Branches | ${total.branches.pct}% |
+              | Statements | ${total.statements.pct}% |`;
+            } catch (e) {
+              console.log('Could not read coverage summary:', e.message);
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: coverage
+            });
