@@ -90,7 +90,58 @@ When making significant changes:
 2. Verify the frontend builds successfully
 3. Test the affected functionality manually if possible
 
-### 5. Biome Lint Rules (peekachoo-admin/)
+### 5. Pre-Push Requirements - MANDATORY
+
+**Before pushing any code to GitHub, ALL THREE modules MUST pass lint with ZERO errors.**
+
+#### Git Pre-Push Hook (Automatic Enforcement)
+
+A pre-push hook is available that automatically runs lint on all modules before allowing a push.
+
+**Install the hook (required after cloning):**
+```bash
+# Windows (PowerShell)
+.\scripts\setup-hooks.ps1
+
+# macOS/Linux (or Git Bash on Windows)
+./scripts/setup-hooks.sh
+```
+
+The hook will:
+- Run `npm run lint` on all three modules
+- Block the push if any module fails
+- Show which module(s) failed and how to fix
+
+**To bypass the hook (not recommended):**
+```bash
+git push --no-verify
+```
+
+#### Manual Verification
+
+Run the following commands and ensure they ALL pass:
+
+```bash
+# All three must pass with 0 errors before pushing!
+cd peekachoo-frontend && npm run lint
+cd peekachoo-backend && npm run lint
+cd peekachoo-admin && npm run lint
+```
+
+**Quick verification script (run from project root):**
+```bash
+cd peekachoo-frontend && npm run lint && cd ../peekachoo-backend && npm run lint && cd ../peekachoo-admin && npm run lint && echo "All lints passed!"
+```
+
+If ANY module fails lint:
+1. Run `npm run lint:fix` in that module to auto-fix what's possible
+2. Manually fix remaining issues
+3. Re-run lint to verify
+4. Only then proceed with push
+
+**DO NOT push code that fails lint checks. This is a blocking requirement.**
+
+### 6. Biome Lint Rules (peekachoo-admin/)
 
 The admin panel uses **Biome** for linting and formatting. Before committing, run:
 ```bash
@@ -223,7 +274,7 @@ Run `npm run format` to auto-fix formatting issues.
 | `noLabelWithoutControl` | Add `htmlFor` to labels with matching `id` on inputs |
 | `useKeyWithClickEvents` | Add `onKeyDown` handler alongside `onClick` |
 
-### 6. Biome Lint Rules (peekachoo-backend/)
+### 7. Biome Lint Rules (peekachoo-backend/)
 
 The backend also uses **Biome** for linting and formatting. Before committing, run:
 ```bash
@@ -313,7 +364,7 @@ Run `npm run format` to auto-fix formatting issues.
 | `noUnusedVariables` | Remove unused imports/variables |
 | `useIterableCallbackReturn` | Don't return values from `forEach` callbacks |
 
-### 7. Biome Lint Rules (peekachoo-frontend/)
+### 8. Biome Lint Rules (peekachoo-frontend/)
 
 The frontend also uses **Biome** for linting and formatting. Before committing, run:
 ```bash
@@ -389,6 +440,61 @@ The frontend `biome.json` has these rules configured as warnings (not errors):
 | `useIterableCallbackReturn` | Don't return values from `forEach` callbacks |
 | `noUnusedVariables` | Remove or prefix with `_` |
 
+### 9. Biome Configuration Reference
+
+This section documents the actual `biome.json` configuration for each module.
+
+#### Common Settings (All Modules)
+
+All modules use Biome v2.3.11 with these shared settings:
+- **Formatter:** Enabled with tab indentation
+- **Quotes:** Double quotes for strings
+- **VCS:** Git integration with `.gitignore` support
+- **Assist:** Auto organize imports enabled
+- **Linter:** Recommended rules enabled as base
+
+#### Frontend (`peekachoo-frontend/biome.json`)
+
+**Files:** `**/*.ts`, `**/*.tsx`, `**/*.js`, `**/*.json`
+
+**Custom Rule Overrides:**
+| Category | Rule | Setting | Reason |
+|----------|------|---------|--------|
+| `complexity` | `noStaticOnlyClass` | `off` | Common pattern in game development |
+| `suspicious` | `noExplicitAny` | `warn` | Game objects often use `any` types |
+| `suspicious` | `noShadowRestrictedNames` | `warn` | Phaser's `Set` shadows global `Set` |
+| `style` | `noNonNullAssertion` | `warn` | Sometimes needed for DOM operations |
+
+#### Backend (`peekachoo-backend/biome.json`)
+
+**Files:** `**/*.js`, `**/*.json`
+
+**Custom Rule Overrides:**
+| Category | Rule | Setting | Reason |
+|----------|------|---------|--------|
+| `suspicious` | `noConsole` | `off` | Server logging is expected |
+
+**Node.js Globals Configured:**
+- `console`, `process`, `Buffer`
+- `__dirname`, `__filename`
+- `module`, `require`, `exports`
+
+#### Admin (`peekachoo-admin/biome.json`)
+
+**Files:** `**/*.ts`, `**/*.tsx`, `**/*.js`, `**/*.jsx`, `**/*.json`
+
+**Custom Rule Overrides:**
+| Category | Rule | Setting | Reason |
+|----------|------|---------|--------|
+| `a11y` | `useKeyWithClickEvents` | `warn` | Accessibility - keyboard handlers |
+| `a11y` | `noStaticElementInteractions` | `off` | Modal patterns require this |
+| `suspicious` | `noArrayIndexKey` | `warn` | React key best practices |
+
+**CSS Configuration:**
+- CSS Modules: Enabled
+- CSS Linting: Disabled
+- CSS Formatting: Disabled
+
 ## Project Structure
 
 ```
@@ -419,6 +525,14 @@ Peekachoo/
 │   │   └── lib/           # Utilities & backend API client
 │   ├── biome.json         # Biome linter configuration
 │   └── package.json
+│
+├── hooks/                 # Git hooks (tracked in repo)
+│   └── pre-push           # Pre-push lint hook
+│
+├── scripts/               # Utility scripts
+│   ├── setup-hooks.sh     # Install git hooks (Unix/Git Bash)
+│   ├── setup-hooks.ps1    # Install git hooks (PowerShell)
+│   └── ...                # Other utility scripts
 │
 └── CLAUDE.md              # This file
 ```
