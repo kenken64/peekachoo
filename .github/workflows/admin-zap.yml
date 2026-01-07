@@ -1,0 +1,273 @@
+name: Admin Panel OWASP ZAP Scan
+
+on:
+  # Manual trigger only - ZAP scans can be slow and resource-intensive
+  workflow_dispatch:
+    inputs:
+      scan_type:
+        description: 'Type of scan to run'
+        required: true
+        default: 'baseline'
+        type: choice
+        options:
+          - baseline
+          - full
+  schedule:
+    # Run weekly on Sundays at 4 AM
+    - cron: '0 4 * * 0'
+
+permissions:
+  contents: read
+  security-events: write
+  issues: write
+
+env:
+  TARGET_URL: https://peekachoo-admin-production.up.railway.app
+
+jobs:
+  zap-baseline-scan:
+    name: ZAP Baseline Scan (Unauthenticated)
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.scan_type == 'baseline' || github.event_name == 'schedule' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.14.0
+        with:
+          target: ${{ env.TARGET_URL }}
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a'
+          allow_issue_writing: true
+          fail_action: false
+
+      - name: Upload ZAP Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: zap-baseline-report
+          path: |
+            report_html.html
+            report_json.json
+            report_md.md
+          retention-days: 30
+
+  zap-authenticated-scan:
+    name: ZAP Authenticated Full Scan
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.scan_type == 'full' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create ZAP context file
+        run: |
+          mkdir -p .zap
+          cat > .zap/admin-context.context << 'EOF'
+          <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+          <configuration>
+              <context>
+                  <name>Admin Panel</name>
+                  <desc>Peekachoo Admin Panel Context</desc>
+                  <inscope>true</inscope>
+                  <incregexes>https://peekachoo-admin-production\.up\.railway\.app.*</incregexes>
+                  <tech>
+                      <include>Db</include>
+                      <include>Language</include>
+                      <include>Language.JavaScript</include>
+                      <include>OS</include>
+                      <include>SCM</include>
+                      <include>WS</include>
+                      <include>WS.Node.js</include>
+                  </tech>
+                  <urlparser>
+                      <class>org.zaproxy.zap.model.StandardParameterParser</class>
+                      <config>{"kvps":"&amp;","kvs":"=","struct":[]}</config>
+                  </urlparser>
+                  <authentication>
+                      <type>2</type>
+                      <strategy>EACH_RESP</strategy>
+                      <pollurl></pollurl>
+                      <polldata></polldata>
+                      <pollheaders></pollheaders>
+                      <pollfreq>60</pollfreq>
+                      <pollunits>REQUESTS</pollunits>
+                      <loggedin>\Qadmin_authenticated=true\E</loggedin>
+                      <loggedout>\QLogin\E|\Qpassword\E</loggedout>
+                      <form>
+                          <loginurl>https://peekachoo-admin-production.up.railway.app/api/auth/login</loginurl>
+                          <loginbody>{"password":"{%password%}"}</loginbody>
+                          <loginpageurl>https://peekachoo-admin-production.up.railway.app/</loginpageurl>
+                      </form>
+                  </authentication>
+                  <users>
+                      <user>admin;true;{%password%}</user>
+                  </users>
+                  <session>
+                      <type>0</type>
+                  </session>
+              </context>
+          </configuration>
+          EOF
+
+      - name: Create authentication script
+        run: |
+          cat > .zap/auth-hook.py << 'EOF'
+          import json
+          import urllib.request
+          import urllib.parse
+          import os
+
+          def authenticate(helper, paramsValues, credentials):
+              """
+              Authenticate to the admin panel via API
+              """
+              print("Starting authentication...")
+              
+              target_url = "https://peekachoo-admin-production.up.railway.app/api/auth/login"
+              password = credentials.getParam("password")
+              
+              data = json.dumps({"password": password}).encode('utf-8')
+              
+              req = urllib.request.Request(
+                  target_url,
+                  data=data,
+                  headers={
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/json'
+                  },
+                  method='POST'
+              )
+              
+              try:
+                  response = urllib.request.urlopen(req)
+                  print(f"Auth response: {response.status}")
+                  
+                  # Get the Set-Cookie header
+                  cookies = response.headers.get_all('Set-Cookie')
+                  if cookies:
+                      for cookie in cookies:
+                          if 'admin_authenticated' in cookie:
+                              print("Authentication successful!")
+                              return cookie
+                  
+                  return None
+              except Exception as e:
+                  print(f"Auth error: {e}")
+                  return None
+
+          def get_required_params_names():
+              return ["password"]
+
+          def get_optional_params_names():
+              return []
+
+          def get_credentials_params_names():
+              return ["password"]
+          EOF
+
+      - name: Run ZAP Full Scan with Authentication
+        uses: zaproxy/action-full-scan@v0.12.0
+        with:
+          target: ${{ env.TARGET_URL }}
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: >-
+            -z "-config auth.loginurl=https://peekachoo-admin-production.up.railway.app/api/auth/login
+            -config auth.password=${{ secrets.ADMIN_PASSWORD }}
+            -config auth.auto=true"
+          allow_issue_writing: true
+          fail_action: false
+
+      - name: Upload ZAP Full Scan Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: zap-full-scan-report
+          path: |
+            report_html.html
+            report_json.json
+            report_md.md
+          retention-days: 30
+
+  zap-api-scan:
+    name: ZAP API Scan
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.scan_type == 'full' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create OpenAPI spec for admin API
+        run: |
+          mkdir -p .zap
+          cat > .zap/admin-openapi.yaml << 'EOF'
+          openapi: 3.0.0
+          info:
+            title: Peekachoo Admin API
+            version: 1.0.0
+          servers:
+            - url: https://peekachoo-admin-production.up.railway.app
+          paths:
+            /api/auth/login:
+              post:
+                summary: Admin login
+                requestBody:
+                  content:
+                    application/json:
+                      schema:
+                        type: object
+                        properties:
+                          password:
+                            type: string
+                responses:
+                  '200':
+                    description: Login successful
+            /api/auth/logout:
+              post:
+                summary: Admin logout
+                responses:
+                  '200':
+                    description: Logout successful
+            /api/auth/check:
+              get:
+                summary: Check authentication status
+                responses:
+                  '200':
+                    description: Auth status
+            /api/users:
+              get:
+                summary: Get all users
+                responses:
+                  '200':
+                    description: User list
+            /api/payments:
+              get:
+                summary: Get all payments
+                responses:
+                  '200':
+                    description: Payment list
+          EOF
+
+      - name: Run ZAP API Scan
+        uses: zaproxy/action-api-scan@v0.9.0
+        with:
+          target: '.zap/admin-openapi.yaml'
+          format: openapi
+          cmd_options: '-z "-config replacer.full_list(0).description=AddAuthHeader -config replacer.full_list(0).enabled=true -config replacer.full_list(0).matchtype=REQ_HEADER -config replacer.full_list(0).matchstr=Cookie -config replacer.full_list(0).regex=false -config replacer.full_list(0).replacement=admin_authenticated=true"'
+          allow_issue_writing: true
+          fail_action: false
+
+      - name: Upload ZAP API Scan Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: zap-api-scan-report
+          path: |
+            report_html.html
+            report_json.json
+            report_md.md
+          retention-days: 30
