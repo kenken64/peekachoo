@@ -1,7 +1,7 @@
 name: Admin Panel OWASP ZAP Scan
 
 on:
-  # Manual trigger only - ZAP scans can be slow and resource-intensive
+  # Manual trigger
   workflow_dispatch:
     inputs:
       scan_type:
@@ -12,6 +12,11 @@ on:
         options:
           - baseline
           - full
+  
+  # Triggered by Railway deploy webhook via repository dispatch
+  repository_dispatch:
+    types: [admin-deployed]
+  
   schedule:
     # Run weekly on Sundays at 4 AM
     - cron: '0 4 * * 0'
@@ -25,10 +30,39 @@ env:
   TARGET_URL: https://peekachoo-admin-production.up.railway.app
 
 jobs:
+  health-check:
+    name: Verify Deployment is Live
+    runs-on: ubuntu-latest
+    outputs:
+      is_healthy: ${{ steps.check.outputs.healthy }}
+    
+    steps:
+      - name: Wait for deployment to stabilize
+        run: sleep 30
+      
+      - name: Check if admin panel is responding
+        id: check
+        run: |
+          echo "Checking ${{ env.TARGET_URL }}..."
+          for i in {1..5}; do
+            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ env.TARGET_URL }}" || echo "000")
+            echo "Attempt $i: HTTP Status $HTTP_STATUS"
+            if [ "$HTTP_STATUS" = "200" ]; then
+              echo "healthy=true" >> $GITHUB_OUTPUT
+              echo "✅ Admin panel is healthy!"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "healthy=false" >> $GITHUB_OUTPUT
+          echo "❌ Admin panel is not responding"
+          exit 1
+
   zap-baseline-scan:
     name: ZAP Baseline Scan (Unauthenticated)
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.scan_type == 'baseline' || github.event_name == 'schedule' }}
+    needs: health-check
+    if: ${{ needs.health-check.outputs.is_healthy == 'true' && (github.event.inputs.scan_type == 'baseline' || github.event_name == 'schedule' || github.event_name == 'repository_dispatch') }}
 
     steps:
       - name: Checkout repository
