@@ -38,7 +38,7 @@ jobs:
         run: npx biome check . --reporter=github
 
       - name: Run Biome format check
-        run: npx biome format --check . --reporter=github
+        run: npx biome format --check .
 
       - name: Generate JSON report
         if: always()
