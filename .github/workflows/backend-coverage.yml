@@ -1,20 +1,20 @@
-name: Frontend Test Coverage
+name: Backend Test Coverage
 
 on:
   push:
     branches: [main]
     paths:
-      - 'peekachoo-frontend/src/**'
-      - 'peekachoo-frontend/test/**'
-      - 'peekachoo-frontend/package.json'
-      - 'peekachoo-frontend/jest.config.js'
+      - 'peekachoo-backend/src/**'
+      - 'peekachoo-backend/test/**'
+      - 'peekachoo-backend/package.json'
+      - 'peekachoo-backend/jest.config.js'
   pull_request:
     branches: [main]
     paths:
-      - 'peekachoo-frontend/src/**'
-      - 'peekachoo-frontend/test/**'
-      - 'peekachoo-frontend/package.json'
-      - 'peekachoo-frontend/jest.config.js'
+      - 'peekachoo-backend/src/**'
+      - 'peekachoo-backend/test/**'
+      - 'peekachoo-backend/package.json'
+      - 'peekachoo-backend/jest.config.js'
   workflow_dispatch:
 
 permissions:
@@ -37,23 +37,23 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: peekachoo-frontend/package-lock.json
+          cache-dependency-path: peekachoo-backend/package-lock.json
 
       - name: Install dependencies
-        working-directory: peekachoo-frontend
+        working-directory: peekachoo-backend
         run: npm ci
 
       - name: Run tests with coverage
-        working-directory: peekachoo-frontend
+        working-directory: peekachoo-backend
         run: npm run test:coverage
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./peekachoo-frontend/coverage/lcov.info
-          flags: frontend
-          name: frontend-coverage
+          files: ./peekachoo-backend/coverage/lcov.info
+          flags: backend
+          name: backend-coverage
           fail_ci_if_error: false
           verbose: true
 
@@ -61,15 +61,15 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: frontend-coverage-report
-          path: peekachoo-frontend/coverage/
+          name: backend-coverage-report
+          path: peekachoo-backend/coverage/
           retention-days: 7
           if-no-files-found: warn
 
       - name: Generate Coverage Summary
-        working-directory: peekachoo-frontend
+        working-directory: peekachoo-backend
         run: |
-          echo "## 📊 Frontend Test Coverage" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Backend Test Coverage" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
           if [ -f coverage/coverage-summary.json ]; then
@@ -97,9 +97,9 @@ jobs:
             let coverage = 'Coverage report not available';
             
             try {
-              const summary = JSON.parse(fs.readFileSync('peekachoo-frontend/coverage/coverage-summary.json', 'utf8'));
+              const summary = JSON.parse(fs.readFileSync('peekachoo-backend/coverage/coverage-summary.json', 'utf8'));
               const total = summary.total;
-              coverage = `## 📊 Frontend Coverage Report
+              coverage = `## 📊 Backend Coverage Report
               
               | Metric | Coverage |
               |--------|----------|

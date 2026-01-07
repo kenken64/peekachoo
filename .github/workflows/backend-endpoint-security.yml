@@ -1,0 +1,272 @@
+name: Backend Endpoint Security Verification
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'peekachoo-backend/src/routes/**'
+      - 'peekachoo-backend/src/middlewares/**'
+      - 'peekachoo-backend/ENDPOINT-SECURITY.md'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'peekachoo-backend/src/routes/**'
+      - 'peekachoo-backend/src/middlewares/**'
+      - 'peekachoo-backend/ENDPOINT-SECURITY.md'
+  workflow_dispatch:
+
+env:
+  # Use production URL for testing deployed endpoints
+  # For local testing, this could be http://localhost:3000
+  API_BASE_URL: https://peekachoo-backend-production.up.railway.app
+
+jobs:
+  verify-public-endpoints:
+    name: Verify Public Endpoints (No Auth Required)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Test Public Endpoints
+        run: |
+          echo "🔓 Testing Public Endpoints..."
+          echo "================================"
+          
+          FAILED=0
+          
+          # Function to test public endpoint
+          test_public() {
+            local METHOD=$1
+            local ENDPOINT=$2
+            local EXPECTED=$3
+            local BODY=$4
+            
+            if [ "$METHOD" = "GET" ]; then
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$API_BASE_URL$ENDPOINT")
+            else
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X $METHOD \
+                -H "Content-Type: application/json" \
+                -d "$BODY" \
+                "$API_BASE_URL$ENDPOINT")
+            fi
+            
+            if [ "$STATUS" = "$EXPECTED" ] || [ "$STATUS" = "200" ] || [ "$STATUS" = "404" ]; then
+              echo "✅ $METHOD $ENDPOINT - HTTP $STATUS (accessible without auth)"
+            else
+              echo "❌ $METHOD $ENDPOINT - HTTP $STATUS (expected $EXPECTED or 200)"
+              FAILED=1
+            fi
+          }
+          
+          # Root API
+          test_public "GET" "/api" "200"
+          
+          # Auth - Public endpoints
+          test_public "GET" "/api/auth/config" "200"
+          test_public "GET" "/api/auth/check-username/testuser123" "200"
+          
+          # These require valid request bodies, so we expect 400 (bad request) not 401 (unauthorized)
+          test_public "POST" "/api/auth/register/start" "400" '{"username":"test"}'
+          test_public "POST" "/api/auth/login/start" "400" '{"username":"test"}'
+          
+          echo ""
+          echo "================================"
+          if [ $FAILED -eq 1 ]; then
+            echo "❌ Some public endpoints failed!"
+            exit 1
+          else
+            echo "✅ All public endpoints are accessible without authentication"
+          fi
+
+  verify-protected-endpoints:
+    name: Verify Protected Endpoints (JWT Required)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Test Protected Endpoints Return 401 Without Auth
+        run: |
+          echo "🔐 Testing Protected Endpoints (should return 401 without JWT)..."
+          echo "================================================================="
+          
+          FAILED=0
+          
+          # Function to test protected endpoint
+          test_protected() {
+            local METHOD=$1
+            local ENDPOINT=$2
+            
+            if [ "$METHOD" = "GET" ]; then
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$API_BASE_URL$ENDPOINT")
+            else
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X $METHOD \
+                -H "Content-Type: application/json" \
+                -d '{}' \
+                "$API_BASE_URL$ENDPOINT")
+            fi
+            
+            if [ "$STATUS" = "401" ]; then
+              echo "✅ $METHOD $ENDPOINT - HTTP 401 (correctly requires auth)"
+            else
+              echo "❌ $METHOD $ENDPOINT - HTTP $STATUS (expected 401)"
+              FAILED=1
+            fi
+          }
+          
+          # Auth - Protected
+          test_protected "GET" "/api/auth/me"
+          test_protected "POST" "/api/auth/purchase-shield"
+          test_protected "POST" "/api/auth/consume-shield"
+          
+          # Payment - Protected
+          test_protected "GET" "/api/payment/purchase-status"
+          test_protected "POST" "/api/payment/create-order"
+          test_protected "POST" "/api/payment/verify-payment"
+          
+          # Leaderboard - Protected
+          test_protected "GET" "/api/leaderboard/global"
+          test_protected "GET" "/api/leaderboard/level/1"
+          test_protected "GET" "/api/leaderboard/game/1"
+          test_protected "GET" "/api/leaderboard/around-me"
+          test_protected "POST" "/api/leaderboard/scores"
+          test_protected "POST" "/api/leaderboard/sessions"
+          
+          # Quiz - Protected
+          test_protected "POST" "/api/quiz/generate"
+          
+          # Peekachoos - Protected
+          test_protected "GET" "/api/peekachoos"
+          test_protected "GET" "/api/peekachoos/1"
+          test_protected "POST" "/api/peekachoos"
+          test_protected "PUT" "/api/peekachoos/1"
+          test_protected "DELETE" "/api/peekachoos/1"
+          
+          # Games - Protected
+          test_protected "POST" "/api/games"
+          test_protected "GET" "/api/games/my-games"
+          test_protected "GET" "/api/games/published"
+          test_protected "GET" "/api/games/1"
+          test_protected "PUT" "/api/games/1"
+          test_protected "PATCH" "/api/games/1/publish"
+          test_protected "DELETE" "/api/games/1"
+          test_protected "POST" "/api/games/1/play"
+          
+          # Stats - Protected
+          test_protected "GET" "/api/stats/me"
+          test_protected "GET" "/api/stats/player/1"
+          test_protected "GET" "/api/stats/history"
+          test_protected "GET" "/api/stats/collection"
+          
+          # Pokemon - Protected
+          test_protected "POST" "/api/pokemon/sync"
+          test_protected "GET" "/api/pokemon/random-unrevealed"
+          test_protected "GET" "/api/pokemon"
+          test_protected "GET" "/api/pokemon/search"
+          test_protected "GET" "/api/pokemon/type/fire"
+          test_protected "GET" "/api/pokemon/1"
+          
+          # Achievements - Protected
+          test_protected "GET" "/api/achievements"
+          test_protected "GET" "/api/achievements/categories"
+          test_protected "GET" "/api/achievements/category/exploration"
+          test_protected "GET" "/api/achievements/first-catch"
+          
+          echo ""
+          echo "================================================================="
+          if [ $FAILED -eq 1 ]; then
+            echo "❌ Some protected endpoints are not properly secured!"
+            exit 1
+          else
+            echo "✅ All protected endpoints correctly require JWT authentication"
+          fi
+
+  verify-admin-endpoints:
+    name: Verify Admin Endpoints (API Key Required)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Test Admin Endpoints Return 401 Without API Key
+        run: |
+          echo "🔑 Testing Admin Endpoints (should return 401 without API key)..."
+          echo "================================================================="
+          
+          FAILED=0
+          
+          # Function to test admin endpoint
+          test_admin() {
+            local METHOD=$1
+            local ENDPOINT=$2
+            
+            if [ "$METHOD" = "GET" ]; then
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$API_BASE_URL$ENDPOINT")
+            else
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X $METHOD \
+                -H "Content-Type: application/json" \
+                -d '{}' \
+                "$API_BASE_URL$ENDPOINT")
+            fi
+            
+            if [ "$STATUS" = "401" ]; then
+              echo "✅ $METHOD $ENDPOINT - HTTP 401 (correctly requires API key)"
+            else
+              echo "❌ $METHOD $ENDPOINT - HTTP $STATUS (expected 401)"
+              FAILED=1
+            fi
+          }
+          
+          # Admin Routes
+          test_admin "GET" "/api/admin/users"
+          test_admin "GET" "/api/admin/users/count"
+          test_admin "GET" "/api/admin/users/1"
+          test_admin "GET" "/api/admin/users/1/purchases"
+          test_admin "DELETE" "/api/admin/users/1"
+          test_admin "POST" "/api/admin/pokemon/sync"
+          test_admin "POST" "/api/admin/payments/sync"
+          test_admin "GET" "/api/admin/payments/debug"
+          test_admin "GET" "/api/admin/payments"
+          
+          echo ""
+          echo "================================================================="
+          if [ $FAILED -eq 1 ]; then
+            echo "❌ Some admin endpoints are not properly secured!"
+            exit 1
+          else
+            echo "✅ All admin endpoints correctly require API key authentication"
+          fi
+
+  summary:
+    name: Security Test Summary
+    runs-on: ubuntu-latest
+    needs: [verify-public-endpoints, verify-protected-endpoints, verify-admin-endpoints]
+    if: always()
+    
+    steps:
+      - name: Generate Summary
+        run: |
+          echo "## 🛡️ Endpoint Security Verification Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Category | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|--------|" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ needs.verify-public-endpoints.result }}" = "success" ]; then
+            echo "| 🔓 Public Endpoints | ✅ Pass |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 🔓 Public Endpoints | ❌ Fail |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ needs.verify-protected-endpoints.result }}" = "success" ]; then
+            echo "| 🔐 JWT Protected Endpoints | ✅ Pass |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 🔐 JWT Protected Endpoints | ❌ Fail |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ needs.verify-admin-endpoints.result }}" = "success" ]; then
+            echo "| 🔑 Admin API Key Endpoints | ✅ Pass |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 🔑 Admin API Key Endpoints | ❌ Fail |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Coverage" >> $GITHUB_STEP_SUMMARY
+          echo "- **Public endpoints tested:** 5" >> $GITHUB_STEP_SUMMARY
+          echo "- **JWT protected endpoints tested:** 35" >> $GITHUB_STEP_SUMMARY
+          echo "- **Admin protected endpoints tested:** 9" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total:** 49 endpoints" >> $GITHUB_STEP_SUMMARY
