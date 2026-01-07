@@ -1,0 +1,85 @@
+name: Admin Panel Trivy Scan
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'peekachoo-admin/**'
+      - '.github/workflows/admin-trivy.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'peekachoo-admin/**'
+      - '.github/workflows/admin-trivy.yml'
+  schedule:
+    # Run weekly on Sundays at midnight
+    - cron: '0 0 * * 0'
+
+jobs:
+  trivy-scan:
+    name: Trivy Security Scan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: peekachoo-admin
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./peekachoo-admin
+          push: false
+          load: true
+          tags: peekachoo-admin:scan
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'peekachoo-admin:scan'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+          output: 'trivy-results.txt'
+
+      - name: Run Trivy scanner (SARIF output)
+        uses: aquasecurity/trivy-action@master
+        if: always()
+        with:
+          image-ref: 'peekachoo-admin:scan'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH,MEDIUM'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Upload Trivy report as artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: trivy-report
+          path: |
+            trivy-results.txt
+            trivy-results.sarif
+          retention-days: 30
+
+      - name: Display scan results
+        if: always()
+        run: |
+          echo "=== Trivy Scan Results ==="
+          cat ../trivy-results.txt || echo "No results file found"
