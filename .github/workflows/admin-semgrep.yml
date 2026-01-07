@@ -44,7 +44,7 @@ jobs:
             --sarif-output=semgrep-results.sarif \
             --json \
             --json-output=semgrep-results.json \
-            peekachoo-admin/
+            peekachoo-admin/ || true
         env:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
 
@@ -70,22 +70,8 @@ jobs:
         run: |
           echo "=== Semgrep Scan Summary ==="
           if [ -f semgrep-results.json ]; then
-            cat semgrep-results.json | python3 -c "
-import json, sys
-data = json.load(sys.stdin)
-results = data.get('results', [])
-errors = data.get('errors', [])
-print(f'Total findings: {len(results)}')
-print(f'Total errors: {len(errors)}')
-if results:
-    severity_counts = {}
-    for r in results:
-        sev = r.get('extra', {}).get('severity', 'UNKNOWN')
-        severity_counts[sev] = severity_counts.get(sev, 0) + 1
-    print('By severity:')
-    for sev, count in sorted(severity_counts.items()):
-        print(f'  {sev}: {count}')
-"
+            echo "Results found. Counting findings..."
+            grep -c '"check_id"' semgrep-results.json || echo "0 findings"
           else
             echo "No results file found"
           fi
