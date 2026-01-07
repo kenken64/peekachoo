@@ -64,8 +64,13 @@ export default function AdminPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [totalShieldsSold, setTotalShieldsSold] = useState(0);
-  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
+
+  // Delete confirmation modal state
+  const [deleteModalUser, setDeleteModalUser] = useState<User | null>(null);
+  const [deletePassword, setDeletePassword] = useState('');
+  const [deleteAgreement, setDeleteAgreement] = useState('');
+  const [deleteError, setDeleteError] = useState('');
 
   // Purchase history modal state
   const [purchaseHistoryUser, setPurchaseHistoryUser] = useState<User | null>(null);
@@ -218,8 +223,36 @@ export default function AdminPage() {
   };
 
   const handleDelete = async (userId: string) => {
+    // Validate password first
+    if (!deletePassword) {
+      setDeleteError('Please enter the admin password');
+      return;
+    }
+    
+    // Validate agreement text
+    if (deleteAgreement.toLowerCase() !== 'i agree to delete') {
+      setDeleteError('Please type "I agree to delete" to confirm');
+      return;
+    }
+
     setActionLoading(true);
+    setDeleteError('');
+    
     try {
+      // First verify the password
+      const authRes = await fetch('/api/auth/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: deletePassword }),
+      });
+
+      if (!authRes.ok) {
+        setDeleteError('Invalid admin password');
+        setActionLoading(false);
+        return;
+      }
+
+      // Password verified, proceed with deletion
       const res = await fetch(`/api/users/${userId}`, {
         method: 'DELETE',
       });
@@ -227,17 +260,31 @@ export default function AdminPage() {
       if (res.ok) {
         // Reload users to get accurate count and pagination
         loadUsers();
-        setDeleteConfirm(null);
+        closeDeleteModal();
       } else {
         const data = await res.json();
-        alert(data.error || 'Failed to delete user');
+        setDeleteError(data.error || 'Failed to delete user');
       }
     } catch (err) {
       console.error('Delete failed:', err);
-      alert('Failed to delete user');
+      setDeleteError('Failed to delete user');
     } finally {
       setActionLoading(false);
     }
+  };
+
+  const openDeleteModal = (user: User) => {
+    setDeleteModalUser(user);
+    setDeletePassword('');
+    setDeleteAgreement('');
+    setDeleteError('');
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModalUser(null);
+    setDeletePassword('');
+    setDeleteAgreement('');
+    setDeleteError('');
   };
 
   const handleShowPurchaseHistory = async (user: User) => {
@@ -619,34 +666,15 @@ export default function AdminPage() {
                       <TableCell className="hidden lg:table-cell text-muted-foreground">{formatDate(user.created_at)}</TableCell>
                       <TableCell className="hidden lg:table-cell text-muted-foreground font-mono text-xs">{user.id.substring(0, 8)}...</TableCell>
                       <TableCell className="text-right">
-                        {deleteConfirm === user.id ? (
-                          <div className="flex justify-end gap-2">
-                            <Button
-                              size="sm"
-                              variant="destructive"
-                              onClick={() => handleDelete(user.id)}
-                              disabled={actionLoading}
-                            >
-                              {actionLoading ? '...' : 'Confirm'}
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="secondary"
-                              onClick={() => setDeleteConfirm(null)}
-                            >
-                              Cancel
-                            </Button>
-                          </div>
-                        ) : (
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                            onClick={() => setDeleteConfirm(user.id)}
-                          >
-                            Delete
-                          </Button>
-                        )}
+                      <TableCell className="text-right">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                          onClick={() => openDeleteModal(user)}
+                        >
+                          Delete
+                        </Button>
                       </TableCell>
                     </TableRow>
                   );})
@@ -870,6 +898,75 @@ export default function AdminPage() {
 
             <div className="mt-4 text-right">
               <Button variant="outline" onClick={closePurchaseHistoryModal}>Close</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteModalUser && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" onClick={closeDeleteModal}>
+          <div className="bg-slate-900 border border-slate-700 rounded-lg p-6 max-w-md w-full mx-4" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-red-500">
+                ⚠️ Delete User
+              </h3>
+              <button onClick={closeDeleteModal} className="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            
+            <div className="mb-4 p-3 bg-red-950/30 border border-red-900 rounded-md">
+              <p className="text-gray-300 mb-2">
+                You are about to permanently delete user:
+              </p>
+              <p className="text-white font-bold text-lg">{deleteModalUser.username}</p>
+              <p className="text-gray-400 text-sm mt-2">
+                This action cannot be undone. All user data including purchases, scores, and achievements will be permanently deleted.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-gray-400 text-sm mb-1">Enter your admin password:</label>
+                <input
+                  type="password"
+                  value={deletePassword}
+                  onChange={(e) => setDeletePassword(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-md text-white focus:outline-none focus:border-red-500"
+                  placeholder="Admin password"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-400 text-sm mb-1">
+                  Type <span className="text-red-500 font-mono">I agree to delete</span> to confirm:
+                </label>
+                <input
+                  type="text"
+                  value={deleteAgreement}
+                  onChange={(e) => setDeleteAgreement(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-md text-white focus:outline-none focus:border-red-500"
+                  placeholder="I agree to delete"
+                />
+              </div>
+
+              {deleteError && (
+                <div className="p-2 bg-red-900/50 border border-red-700 rounded text-red-300 text-sm">
+                  {deleteError}
+                </div>
+              )}
+
+              <div className="flex justify-end gap-2 pt-2">
+                <Button variant="outline" onClick={closeDeleteModal}>
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={() => handleDelete(deleteModalUser.id)}
+                  disabled={actionLoading}
+                >
+                  {actionLoading ? 'Deleting...' : 'Delete User'}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
