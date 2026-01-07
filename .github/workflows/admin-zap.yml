@@ -91,7 +91,8 @@ jobs:
   zap-authenticated-scan:
     name: ZAP Authenticated Full Scan
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.scan_type == 'full' }}
+    needs: health-check
+    if: ${{ needs.health-check.outputs.is_healthy == 'true' && (github.event.inputs.scan_type == 'full' || github.event_name == 'repository_dispatch') }}
 
     steps:
       - name: Checkout repository
@@ -229,7 +230,8 @@ jobs:
   zap-api-scan:
     name: ZAP API Scan
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.scan_type == 'full' }}
+    needs: health-check
+    if: ${{ needs.health-check.outputs.is_healthy == 'true' && (github.event.inputs.scan_type == 'full' || github.event_name == 'repository_dispatch') }}
 
     steps:
       - name: Checkout repository
