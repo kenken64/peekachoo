@@ -35,10 +35,22 @@ jobs:
         run: npm ci
 
       - name: Run Biome lint
-        run: npm run lint
+        run: npx biome check . --reporter=github
 
       - name: Run Biome format check
-        run: npx biome format --check .
+        run: npx biome format --check . --reporter=github
+
+      - name: Generate JSON report
+        if: always()
+        run: npx biome check . --reporter=json > biome-report.json || true
+
+      - name: Upload Biome report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: biome-report
+          path: peekachoo-admin/biome-report.json
+          retention-days: 30
 
       - name: Build
         run: npm run build
