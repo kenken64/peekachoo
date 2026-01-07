@@ -1,0 +1,355 @@
+name: Frontend OWASP ZAP Scan
+
+on:
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      scan_type:
+        description: 'Type of scan to run'
+        required: true
+        default: 'baseline'
+        type: choice
+        options:
+          - baseline
+          - full
+  
+  # Triggered by Railway deploy webhook via repository dispatch
+  repository_dispatch:
+    types: [frontend-deployed]
+  
+  schedule:
+    # Run weekly on Sundays at 5 AM (1 hour after admin scan)
+    - cron: '0 5 * * 0'
+
+permissions:
+  contents: read
+  security-events: write
+  issues: write
+
+env:
+  TARGET_URL: https://peekachoo-frontend-production.up.railway.app
+  API_URL: https://peekachoo-backend-production.up.railway.app
+
+jobs:
+  health-check:
+    name: Verify Deployment is Live
+    runs-on: ubuntu-latest
+    outputs:
+      is_healthy: ${{ steps.check.outputs.healthy }}
+    
+    steps:
+      - name: Wait for deployment to stabilize
+        run: sleep 30
+      
+      - name: Check if frontend is responding
+        id: check
+        run: |
+          echo "Checking ${{ env.TARGET_URL }}..."
+          for i in {1..5}; do
+            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ env.TARGET_URL }}" || echo "000")
+            echo "Attempt $i: HTTP Status $HTTP_STATUS"
+            if [ "$HTTP_STATUS" = "200" ]; then
+              echo "healthy=true" >> $GITHUB_OUTPUT
+              echo "✅ Frontend is healthy!"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "healthy=false" >> $GITHUB_OUTPUT
+          echo "❌ Frontend is not responding"
+          exit 1
+
+  zap-baseline-scan:
+    name: ZAP Baseline Scan (Unauthenticated)
+    runs-on: ubuntu-latest
+    needs: health-check
+    if: ${{ needs.health-check.outputs.is_healthy == 'true' && (github.event.inputs.scan_type == 'baseline' || github.event_name == 'schedule' || github.event_name == 'repository_dispatch') }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create ZAP rules file
+        run: |
+          mkdir -p .zap
+          cat > .zap/rules.tsv << 'EOF'
+          # ZAP Scan Rules Configuration for Frontend
+          # Format: rule_id	action	description
+          # Actions: IGNORE, WARN, FAIL
+          
+          # Informational rules - set to WARN
+          10021	WARN	X-Content-Type-Options Header Missing
+          10036	WARN	Server Leaks Version Information
+          10037	WARN	Server Leaks Information via X-Powered-By
+          10038	WARN	Content Security Policy Header Not Set
+          10098	WARN	Cross-Domain Misconfiguration
+          
+          # Common in SPAs - Ignore
+          10015	IGNORE	Incomplete or No Cache-control Header Set (SPAs handle caching differently)
+          10055	IGNORE	CSP: Wildcard Directive (common in development)
+          90033	IGNORE	Loosely Scoped Cookie (expected behavior for auth)
+          EOF
+
+      - name: ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.14.0
+        with:
+          target: ${{ env.TARGET_URL }}
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a'
+          allow_issue_writing: false
+          fail_action: false
+          artifact_name: frontend-zap-baseline-${{ github.run_id }}
+
+  zap-authenticated-scan:
+    name: ZAP Authenticated Full Scan
+    runs-on: ubuntu-latest
+    needs: health-check
+    if: ${{ needs.health-check.outputs.is_healthy == 'true' && (github.event.inputs.scan_type == 'full' || github.event_name == 'repository_dispatch') }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify JWT Token is Available
+        run: |
+          if [ -z "${{ secrets.TEST_JWT_TOKEN }}" ]; then
+            echo "⚠️ TEST_JWT_TOKEN secret is not set!"
+            echo "The authenticated scan requires a valid JWT token."
+            echo ""
+            echo "To generate one:"
+            echo "1. cd peekachoo-backend"
+            echo "2. JWT_SECRET=your-secret node scripts/generate-test-jwt.js"
+            echo "3. Add the generated token as a GitHub secret named TEST_JWT_TOKEN"
+            exit 1
+          fi
+          echo "✅ JWT token is available"
+
+      - name: Create ZAP rules file
+        run: |
+          mkdir -p .zap
+          cat > .zap/rules.tsv << 'EOF'
+          # ZAP Scan Rules Configuration for Frontend (Authenticated)
+          # Format: rule_id	action	description
+          # Actions: IGNORE, WARN, FAIL
+          
+          # Informational rules - set to WARN
+          10021	WARN	X-Content-Type-Options Header Missing
+          10036	WARN	Server Leaks Version Information
+          10037	WARN	Server Leaks Information via X-Powered-By
+          10038	WARN	Content Security Policy Header Not Set
+          10098	WARN	Cross-Domain Misconfiguration
+          
+          # Proxy/Infrastructure related - Railway specific
+          40025	WARN	Proxy Disclosure
+          90004	WARN	Insufficient Site Isolation Against Spectre Vulnerability
+          
+          # Common in SPAs - Ignore
+          10015	IGNORE	Incomplete or No Cache-control Header Set
+          10055	IGNORE	CSP: Wildcard Directive
+          90033	IGNORE	Loosely Scoped Cookie
+          EOF
+
+      - name: Create ZAP authentication hook script
+        run: |
+          cat > .zap/add-auth-header.js << 'EOF'
+          // ZAP script to add Authorization header to all requests
+          function proxyRequest(msg) {
+              var token = org.parosproxy.paros.Constant.getZapHome() + "/.auth_token";
+              var headers = msg.getRequestHeader();
+              
+              // Add JWT token to Authorization header
+              var jwt = "${{ secrets.TEST_JWT_TOKEN }}";
+              if (jwt && jwt !== "") {
+                  headers.setHeader("Authorization", "Bearer " + jwt);
+              }
+              
+              return true;
+          }
+          EOF
+
+      - name: Run ZAP Full Scan with JWT Authentication
+        uses: zaproxy/action-full-scan@v0.12.0
+        with:
+          target: ${{ env.TARGET_URL }}
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: >-
+            -z "-config replacer.full_list(0).description=AddJWTAuth
+            -config replacer.full_list(0).enabled=true
+            -config replacer.full_list(0).matchtype=REQ_HEADER
+            -config replacer.full_list(0).matchstr=Authorization
+            -config replacer.full_list(0).regex=false
+            -config replacer.full_list(0).replacement=Bearer\ ${{ secrets.TEST_JWT_TOKEN }}"
+          allow_issue_writing: false
+          fail_action: false
+          artifact_name: frontend-zap-full-scan-${{ github.run_id }}
+
+  zap-api-scan:
+    name: ZAP API Scan (Backend APIs via Frontend)
+    runs-on: ubuntu-latest
+    needs: health-check
+    if: ${{ needs.health-check.outputs.is_healthy == 'true' && (github.event.inputs.scan_type == 'full' || github.event_name == 'repository_dispatch') }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify JWT Token is Available
+        run: |
+          if [ -z "${{ secrets.TEST_JWT_TOKEN }}" ]; then
+            echo "⚠️ TEST_JWT_TOKEN secret is not set - running without auth"
+          else
+            echo "✅ JWT token is available for authenticated API scanning"
+          fi
+
+      - name: Create OpenAPI spec for game API endpoints
+        run: |
+          mkdir -p .zap
+          cat > .zap/game-api-openapi.yaml << 'EOF'
+          openapi: 3.0.0
+          info:
+            title: Peekachoo Game API
+            version: 1.0.0
+            description: API endpoints used by the game frontend
+          servers:
+            - url: ${{ env.API_URL }}
+          
+          components:
+            securitySchemes:
+              bearerAuth:
+                type: http
+                scheme: bearer
+                bearerFormat: JWT
+          
+          security:
+            - bearerAuth: []
+          
+          paths:
+            /api:
+              get:
+                summary: API welcome endpoint
+                security: []
+                responses:
+                  '200':
+                    description: API info
+            
+            /api/auth/config:
+              get:
+                summary: WebAuthn configuration
+                security: []
+                responses:
+                  '200':
+                    description: Config data
+            
+            /api/leaderboard/global:
+              get:
+                summary: Get global leaderboard
+                responses:
+                  '200':
+                    description: Leaderboard data
+                  '401':
+                    description: Unauthorized
+            
+            /api/games/published:
+              get:
+                summary: Get published games
+                responses:
+                  '200':
+                    description: Games list
+                  '401':
+                    description: Unauthorized
+            
+            /api/pokemon:
+              get:
+                summary: Get all Pokemon
+                responses:
+                  '200':
+                    description: Pokemon list
+                  '401':
+                    description: Unauthorized
+            
+            /api/stats/me:
+              get:
+                summary: Get current user stats
+                responses:
+                  '200':
+                    description: User stats
+                  '401':
+                    description: Unauthorized
+            
+            /api/achievements:
+              get:
+                summary: Get achievements
+                responses:
+                  '200':
+                    description: Achievements list
+                  '401':
+                    description: Unauthorized
+          EOF
+
+      - name: Run ZAP API Scan
+        uses: zaproxy/action-api-scan@v0.9.0
+        with:
+          target: '.zap/game-api-openapi.yaml'
+          format: openapi
+          cmd_options: '-z "-config replacer.full_list(0).description=AddJWTAuth -config replacer.full_list(0).enabled=true -config replacer.full_list(0).matchtype=REQ_HEADER -config replacer.full_list(0).matchstr=Authorization -config replacer.full_list(0).regex=false -config replacer.full_list(0).replacement=Bearer\ ${{ secrets.TEST_JWT_TOKEN }}"'
+          allow_issue_writing: false
+          fail_action: false
+          artifact_name: frontend-zap-api-scan-${{ github.run_id }}
+
+  summary:
+    name: Security Scan Summary
+    runs-on: ubuntu-latest
+    needs: [health-check, zap-baseline-scan, zap-authenticated-scan, zap-api-scan]
+    if: always()
+    
+    steps:
+      - name: Generate Summary
+        run: |
+          echo "## 🛡️ Frontend OWASP ZAP Scan Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Target:** ${{ env.TARGET_URL }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Run ID:** ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### Scan Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Scan Type | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ needs.health-check.result }}" = "success" ]; then
+            echo "| 🏥 Health Check | ✅ Healthy |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 🏥 Health Check | ❌ Unhealthy |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ needs.zap-baseline-scan.result }}" = "success" ]; then
+            echo "| 🔍 Baseline Scan (Unauthenticated) | ✅ Complete |" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ needs.zap-baseline-scan.result }}" = "skipped" ]; then
+            echo "| 🔍 Baseline Scan (Unauthenticated) | ⏭️ Skipped |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 🔍 Baseline Scan (Unauthenticated) | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ needs.zap-authenticated-scan.result }}" = "success" ]; then
+            echo "| 🔐 Full Scan (JWT Authenticated) | ✅ Complete |" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ needs.zap-authenticated-scan.result }}" = "skipped" ]; then
+            echo "| 🔐 Full Scan (JWT Authenticated) | ⏭️ Skipped |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 🔐 Full Scan (JWT Authenticated) | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ needs.zap-api-scan.result }}" = "success" ]; then
+            echo "| 🔗 API Scan (Backend Endpoints) | ✅ Complete |" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ needs.zap-api-scan.result }}" = "skipped" ]; then
+            echo "| 🔗 API Scan (Backend Endpoints) | ⏭️ Skipped |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 🔗 API Scan (Backend Endpoints) | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📥 Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "Download scan reports from the Artifacts section below." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔑 Authentication" >> $GITHUB_STEP_SUMMARY
+          echo "Authenticated scans use a pre-generated JWT token stored in \`TEST_JWT_TOKEN\` secret." >> $GITHUB_STEP_SUMMARY
+          echo "To regenerate: \`JWT_SECRET=xxx node peekachoo-backend/scripts/generate-test-jwt.js\`" >> $GITHUB_STEP_SUMMARY
