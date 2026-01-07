@@ -37,14 +37,14 @@ Before creating any git commit, you MUST:
 
 #### Frontend (peekachoo-frontend/)
 ```bash
-# 1. Run TypeScript compilation check
-cd peekachoo-frontend && npx tsc --noEmit
-
-# 2. Build the frontend to ensure no build errors
-cd peekachoo-frontend && npm run dev
-
-# 3. Run linting (if eslint is configured)
+# 1. Run Biome linter (MUST pass with 0 errors)
 cd peekachoo-frontend && npm run lint
+
+# 2. Run TypeScript compilation check
+cd peekachoo-frontend && npm run typecheck
+
+# 3. Build the frontend to ensure no build errors
+cd peekachoo-frontend && npm run dev
 ```
 
 #### Backend (peekachoo-backend/)
@@ -313,6 +313,82 @@ Run `npm run format` to auto-fix formatting issues.
 | `noUnusedVariables` | Remove unused imports/variables |
 | `useIterableCallbackReturn` | Don't return values from `forEach` callbacks |
 
+### 7. Biome Lint Rules (peekachoo-frontend/)
+
+The frontend also uses **Biome** for linting and formatting. Before committing, run:
+```bash
+cd peekachoo-frontend && npm run lint
+```
+
+#### TypeScript/Phaser Best Practices
+
+**Use `import type` for type-only imports:**
+```typescript
+// ❌ BAD
+import {Player} from "./player";  // Only used as type
+
+// ✅ GOOD
+import type {Player} from "./player";
+```
+
+**Use optional chaining:**
+```typescript
+// ❌ BAD
+if (window._env_ && window._env_.API_URL) { ... }
+
+// ✅ GOOD
+if (window._env_?.API_URL) { ... }
+```
+
+**Use `@ts-expect-error` instead of `@ts-ignore`:**
+```typescript
+// ❌ BAD
+// @ts-ignore
+return Phaser.Geom.Polygon.Contains(poly, p.x, p.y);
+
+// ✅ GOOD
+// @ts-expect-error - Phaser type definition mismatch
+return Phaser.Geom.Polygon.Contains(poly, p.x, p.y);
+```
+
+**Don't return values from forEach callbacks:**
+```typescript
+// ❌ BAD
+elements.forEach((el) => el.remove());  // Implicit return
+
+// ✅ GOOD
+elements.forEach((el) => {
+    el.remove();
+});
+```
+
+**Prefix unused destructured variables:**
+```typescript
+// ❌ BAD
+const { width, height } = this.cameras.main;  // width unused
+
+// ✅ GOOD
+const { width: _width, height } = this.cameras.main;
+```
+
+#### Configured Rules
+
+The frontend `biome.json` has these rules configured as warnings (not errors):
+- `noExplicitAny` - Many game objects use `any` types
+- `noShadowRestrictedNames` - Phaser's `Set` type shadows global `Set`
+- `noNonNullAssertion` - Sometimes needed for DOM operations
+- `noStaticOnlyClass` - Common pattern in game development (turned off)
+
+#### Quick Reference - Common Frontend Biome Errors
+
+| Error | Fix |
+|-------|-----|
+| `useImportType` | Add `type` keyword to type-only imports |
+| `useOptionalChain` | Replace `a && a.b` with `a?.b` |
+| `noTsIgnore` | Use `@ts-expect-error` instead of `@ts-ignore` |
+| `useIterableCallbackReturn` | Don't return values from `forEach` callbacks |
+| `noUnusedVariables` | Remove or prefix with `_` |
+
 ## Project Structure
 
 ```
@@ -323,6 +399,7 @@ Peekachoo/
 │   │   ├── services/      # API services
 │   │   ├── stores/        # State management
 │   │   └── objects/       # Game objects
+│   ├── biome.json         # Biome linter configuration
 │   └── package.json
 │
 ├── peekachoo-backend/     # Express.js backend
@@ -353,8 +430,10 @@ Peekachoo/
 |---------|-------------|
 | `npm run dev` | Build for development |
 | `npm run deploy` | Build for production |
-| `npm run lint` | Run ESLint |
-| `npx tsc --noEmit` | Type check without emit |
+| `npm run lint` | Run Biome linter |
+| `npm run lint:fix` | Auto-fix lint issues |
+| `npm run format` | Format code with Biome |
+| `npm run typecheck` | TypeScript check without emit |
 
 ### Backend (peekachoo-backend/)
 | Command | Description |
