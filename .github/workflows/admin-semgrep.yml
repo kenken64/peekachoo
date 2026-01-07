@@ -30,7 +30,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run Semgrep scan
+      - name: Run Semgrep scan (JSON output)
+        run: |
+          semgrep scan \
+            --config "p/default" \
+            --config "p/javascript" \
+            --config "p/typescript" \
+            --config "p/react" \
+            --config "p/nextjs" \
+            --config "p/security-audit" \
+            --config "p/secrets" \
+            --json \
+            --json-output=semgrep-results.json \
+            peekachoo-admin/ || true
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+
+      - name: Run Semgrep scan (SARIF output)
         run: |
           semgrep scan \
             --config "p/default" \
@@ -42,8 +58,6 @@ jobs:
             --config "p/secrets" \
             --sarif \
             --sarif-output=semgrep-results.sarif \
-            --json \
-            --json-output=semgrep-results.json \
             peekachoo-admin/ || true
         env:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
