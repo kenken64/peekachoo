@@ -24,8 +24,19 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # Create non-root user for security
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+# Remove npm, yarn, and corepack to eliminate vulnerabilities in system packages
+# These are not needed at runtime since we only run "node server.js"
+RUN rm -rf /usr/local/lib/node_modules/npm \
+    /usr/local/bin/npm \
+    /usr/local/bin/npx \
+    /opt/yarn-* \
+    /usr/local/bin/yarn \
+    /usr/local/bin/yarnpkg \
+    /usr/local/lib/node_modules/corepack \
+    /usr/local/bin/corepack
 
 # Copy necessary files from builder
 COPY --from=builder /app/public ./public
