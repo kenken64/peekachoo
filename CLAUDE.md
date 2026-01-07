@@ -49,10 +49,13 @@ cd peekachoo-frontend && npm run lint
 
 #### Backend (peekachoo-backend/)
 ```bash
-# 1. Run syntax check on all JS files
-cd peekachoo-backend && node --check src/server.js
+# 1. Run Biome linter (MUST pass with 0 errors)
+cd peekachoo-backend && npm run lint
 
-# 2. Verify the server can start (quick test)
+# 2. Run syntax check on all JS files
+cd peekachoo-backend && npm run check
+
+# 3. Verify the server can start (quick test)
 cd peekachoo-backend && timeout 5 npm start || true
 ```
 
@@ -220,6 +223,96 @@ Run `npm run format` to auto-fix formatting issues.
 | `noLabelWithoutControl` | Add `htmlFor` to labels with matching `id` on inputs |
 | `useKeyWithClickEvents` | Add `onKeyDown` handler alongside `onClick` |
 
+### 6. Biome Lint Rules (peekachoo-backend/)
+
+The backend also uses **Biome** for linting and formatting. Before committing, run:
+```bash
+cd peekachoo-backend && npm run lint
+```
+
+#### Node.js Best Practices
+
+**Use `node:` protocol for built-in modules:**
+```javascript
+// ❌ BAD
+const path = require('path');
+const fs = require('fs');
+
+// ✅ GOOD
+const path = require('node:path');
+const fs = require('node:fs');
+```
+
+**Always add radix to `parseInt()`:**
+```javascript
+// ❌ BAD
+const page = parseInt(req.query.page) || 1;
+
+// ✅ GOOD
+const page = parseInt(req.query.page, 10) || 1;
+```
+
+**Prefix unused parameters with underscore:**
+```javascript
+// ❌ BAD - Express error handler with unused params
+const errorHandler = (err, req, res, next) => {
+  // req and next are not used
+  res.status(500).json({ error: err.message });
+};
+
+// ✅ GOOD
+const errorHandler = (err, _req, res, _next) => {
+  res.status(500).json({ error: err.message });
+};
+```
+
+**Remove unused imports/variables:**
+```javascript
+// ❌ BAD
+const { v4: uuidv4 } = require('uuid');  // uuidv4 never used
+const { prepare, saveDatabase } = require('../config/sqlite');  // saveDatabase never used
+
+// ✅ GOOD
+const { prepare } = require('../config/sqlite');
+```
+
+**Don't return values from forEach callbacks:**
+```javascript
+// ❌ BAD
+clients.forEach((client) => {
+  if (client.dead) {
+    return client.terminate();  // Returns value from forEach
+  }
+});
+
+// ✅ GOOD
+clients.forEach((client) => {
+  if (client.dead) {
+    client.terminate();
+    return;  // Return without value
+  }
+});
+```
+
+#### Formatting Rules
+
+Biome enforces these formatting rules (configured in `biome.json`):
+- **Indentation:** Tabs
+- **Quotes:** Double quotes for strings
+- **Semicolons:** Required
+
+Run `npm run format` to auto-fix formatting issues.
+
+#### Quick Reference - Common Backend Biome Errors
+
+| Error | Fix |
+|-------|-----|
+| `useNodejsImportProtocol` | Add `node:` prefix to Node.js built-in imports |
+| `useParseIntRadix` | Add radix parameter (usually `10`) to `parseInt()` |
+| `noUnusedFunctionParameters` | Prefix with `_` or remove |
+| `noUnusedVariables` | Remove unused imports/variables |
+| `useIterableCallbackReturn` | Don't return values from `forEach` callbacks |
+
 ## Project Structure
 
 ```
@@ -239,6 +332,7 @@ Peekachoo/
 │   │   ├── routes/        # API routes
 │   │   ├── config/        # Configuration
 │   │   └── middlewares/   # Express middleware
+│   ├── biome.json         # Biome linter configuration
 │   └── package.json
 │
 ├── peekachoo-admin/       # Next.js admin panel
@@ -267,6 +361,10 @@ Peekachoo/
 |---------|-------------|
 | `npm start` | Start the server |
 | `npm run dev` | Start with file watching |
+| `npm run lint` | Run Biome linter |
+| `npm run lint:fix` | Auto-fix lint issues |
+| `npm run format` | Format code with Biome |
+| `npm run check` | Syntax check server files |
 
 ### Admin Panel (peekachoo-admin/)
 | Command | Description |
