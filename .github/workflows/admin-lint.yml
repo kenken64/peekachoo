@@ -1,0 +1,44 @@
+name: Admin Panel Lint
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'peekachoo-admin/**'
+      - '.github/workflows/admin-lint.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'peekachoo-admin/**'
+      - '.github/workflows/admin-lint.yml'
+
+jobs:
+  lint:
+    name: Biome Lint & Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: peekachoo-admin
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: peekachoo-admin/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Biome lint
+        run: npm run lint
+
+      - name: Run Biome format check
+        run: npx biome format --check .
+
+      - name: Build
+        run: npm run build
