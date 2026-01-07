@@ -74,14 +74,14 @@ jobs:
           target: ${{ env.TARGET_URL }}
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a'
-          allow_issue_writing: true
+          allow_issue_writing: false
           fail_action: false
 
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: zap-baseline-report
+          name: zap-baseline-report-${{ github.run_id }}
           path: |
             report_html.html
             report_json.json
@@ -213,14 +213,14 @@ jobs:
             -z "-config auth.loginurl=https://peekachoo-admin-production.up.railway.app/api/auth/login
             -config auth.password=${{ secrets.ADMIN_PASSWORD }}
             -config auth.auto=true"
-          allow_issue_writing: true
+          allow_issue_writing: false
           fail_action: false
 
       - name: Upload ZAP Full Scan Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: zap-full-scan-report
+          name: zap-full-scan-report-${{ github.run_id }}
           path: |
             report_html.html
             report_json.json
@@ -236,6 +236,29 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Authenticate and get session cookie
+        id: auth
+        run: |
+          echo "Authenticating to admin panel..."
+          RESPONSE=$(curl -s -c cookies.txt -b cookies.txt \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -d '{"password":"${{ secrets.ADMIN_PASSWORD }}"}' \
+            "https://peekachoo-admin-production.up.railway.app/api/auth/login")
+          
+          echo "Response: $RESPONSE"
+          
+          # Extract the cookie value
+          if [ -f cookies.txt ]; then
+            echo "Cookies received:"
+            cat cookies.txt
+            COOKIE=$(grep "admin_authenticated" cookies.txt | awk '{print $NF}')
+            echo "cookie_value=$COOKIE" >> $GITHUB_OUTPUT
+          else
+            echo "No cookies received"
+            echo "cookie_value=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: Create OpenAPI spec for admin API
         run: |
@@ -293,15 +316,15 @@ jobs:
         with:
           target: '.zap/admin-openapi.yaml'
           format: openapi
-          cmd_options: '-z "-config replacer.full_list(0).description=AddAuthHeader -config replacer.full_list(0).enabled=true -config replacer.full_list(0).matchtype=REQ_HEADER -config replacer.full_list(0).matchstr=Cookie -config replacer.full_list(0).regex=false -config replacer.full_list(0).replacement=admin_authenticated=true"'
-          allow_issue_writing: true
+          cmd_options: '-z "-config replacer.full_list(0).description=AddAuthCookie -config replacer.full_list(0).enabled=true -config replacer.full_list(0).matchtype=REQ_HEADER -config replacer.full_list(0).matchstr=Cookie -config replacer.full_list(0).regex=false -config replacer.full_list(0).replacement=admin_authenticated=${{ steps.auth.outputs.cookie_value }}"'
+          allow_issue_writing: false
           fail_action: false
 
       - name: Upload ZAP API Scan Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: zap-api-scan-report
+          name: zap-api-scan-report-${{ github.run_id }}
           path: |
             report_html.html
             report_json.json
