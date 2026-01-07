@@ -41,7 +41,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: peekachoo-frontend
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Run tests with coverage
         working-directory: peekachoo-frontend
