@@ -1,0 +1,91 @@
+name: Admin Panel Semgrep Scan
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'peekachoo-admin/**'
+      - '.github/workflows/admin-semgrep.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'peekachoo-admin/**'
+      - '.github/workflows/admin-semgrep.yml'
+  schedule:
+    # Run weekly on Sundays at 1 AM
+    - cron: '0 1 * * 0'
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  semgrep:
+    name: Semgrep Static Analysis
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep scan
+        run: |
+          semgrep scan \
+            --config "p/default" \
+            --config "p/javascript" \
+            --config "p/typescript" \
+            --config "p/react" \
+            --config "p/nextjs" \
+            --config "p/security-audit" \
+            --config "p/secrets" \
+            --sarif \
+            --sarif-output=semgrep-results.sarif \
+            --json \
+            --json-output=semgrep-results.json \
+            peekachoo-admin/
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+
+      - name: Upload Semgrep SARIF to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        continue-on-error: true
+        with:
+          sarif_file: semgrep-results.sarif
+
+      - name: Upload Semgrep results as artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: semgrep-admin-report
+          path: |
+            semgrep-results.sarif
+            semgrep-results.json
+          retention-days: 30
+
+      - name: Display findings summary
+        if: always()
+        run: |
+          echo "=== Semgrep Scan Summary ==="
+          if [ -f semgrep-results.json ]; then
+            cat semgrep-results.json | python3 -c "
+import json, sys
+data = json.load(sys.stdin)
+results = data.get('results', [])
+errors = data.get('errors', [])
+print(f'Total findings: {len(results)}')
+print(f'Total errors: {len(errors)}')
+if results:
+    severity_counts = {}
+    for r in results:
+        sev = r.get('extra', {}).get('severity', 'UNKNOWN')
+        severity_counts[sev] = severity_counts.get(sev, 0) + 1
+    print('By severity:')
+    for sev, count in sorted(severity_counts.items()):
+        print(f'  {sev}: {count}')
+"
+          else
+            echo "No results file found"
+          fi
