@@ -11,6 +11,7 @@ on:
     paths:
       - 'peekachoo-frontend/**'
       - '.github/workflows/frontend-e2e.yml'
+  workflow_dispatch:
   schedule:
     # Run weekly on Sundays at 3 AM
     - cron: '0 3 * * 0'
