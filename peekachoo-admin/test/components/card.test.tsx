@@ -4,11 +4,11 @@
 import { render, screen } from "@testing-library/react";
 import {
 	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
 	CardHeader,
 	CardTitle,
-	CardDescription,
-	CardContent,
-	CardFooter,
 } from "@/components/ui/card";
 
 describe("Card Components", () => {
@@ -146,7 +146,7 @@ describe("Card Components", () => {
 						<p>Card Content</p>
 					</CardContent>
 					<CardFooter>
-						<button>Action</button>
+						<button type="button">Action</button>
 					</CardFooter>
 				</Card>,
 			);
@@ -154,11 +154,13 @@ describe("Card Components", () => {
 			expect(screen.getByText("Card Title")).toBeInTheDocument();
 			expect(screen.getByText("Card Description")).toBeInTheDocument();
 			expect(screen.getByText("Card Content")).toBeInTheDocument();
-			expect(screen.getByRole("button", { name: "Action" })).toBeInTheDocument();
+			expect(
+				screen.getByRole("button", { name: "Action" }),
+			).toBeInTheDocument();
 		});
 
 		it("should maintain proper structure", () => {
-			const { container } = render(
+			render(
 				<Card data-testid="card">
 					<CardHeader data-testid="header">
 						<CardTitle>Title</CardTitle>

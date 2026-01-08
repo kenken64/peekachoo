@@ -9,7 +9,9 @@ describe("Button Component", () => {
 	describe("Rendering", () => {
 		it("should render button with text", () => {
 			render(<Button>Click me</Button>);
-			expect(screen.getByRole("button", { name: /click me/i })).toBeInTheDocument();
+			expect(
+				screen.getByRole("button", { name: /click me/i }),
+			).toBeInTheDocument();
 		});
 
 		it("should render button with children elements", () => {
@@ -28,7 +30,9 @@ describe("Button Component", () => {
 					<a href="/test">Link Button</a>
 				</Button>,
 			);
-			expect(screen.getByRole("link", { name: /link button/i })).toBeInTheDocument();
+			expect(
+				screen.getByRole("link", { name: /link button/i }),
+			).toBeInTheDocument();
 		});
 	});
 

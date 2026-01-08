@@ -4,13 +4,13 @@
 import { render, screen } from "@testing-library/react";
 import {
 	Table,
-	TableHeader,
 	TableBody,
+	TableCaption,
+	TableCell,
 	TableFooter,
 	TableHead,
+	TableHeader,
 	TableRow,
-	TableCell,
-	TableCaption,
 } from "@/components/ui/table";
 
 describe("Table Components", () => {

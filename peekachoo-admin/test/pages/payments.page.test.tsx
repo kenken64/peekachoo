@@ -165,7 +165,9 @@ describe("PaymentsPage", () => {
 			expect(
 				screen.getByRole("button", { name: /refresh/i }),
 			).toBeInTheDocument();
-			expect(screen.getByRole("link", { name: /back to users/i })).toBeInTheDocument();
+			expect(
+				screen.getByRole("link", { name: /back to users/i }),
+			).toBeInTheDocument();
 		});
 
 		it("should display payment stats", async () => {
@@ -243,7 +245,9 @@ describe("PaymentsPage", () => {
 			);
 			await user.type(searchInput, "test");
 
-			const clearButton = screen.getByRole("button", { name: /clear filters/i });
+			const clearButton = screen.getByRole("button", {
+				name: /clear filters/i,
+			});
 			await user.click(clearButton);
 
 			await waitFor(() => {
@@ -354,7 +358,9 @@ describe("PaymentsPage", () => {
 			render(<PaymentsPage />);
 
 			await waitFor(() => {
-				expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument();
+				expect(
+					screen.getByRole("button", { name: "Next" }),
+				).toBeInTheDocument();
 			});
 
 			const nextButton = screen.getByRole("button", { name: "Next" });

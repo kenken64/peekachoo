@@ -1,5 +1,6 @@
 // Polyfill TextEncoder/TextDecoder FIRST (required by undici)
-import { TextEncoder, TextDecoder } from "util";
+import { TextDecoder, TextEncoder } from "node:util";
+
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder as typeof global.TextDecoder;
 

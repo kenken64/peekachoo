@@ -130,7 +130,9 @@ describe("Input Component", () => {
 			};
 
 			const React = await import("react");
-			const { render: renderComponent } = await import("@testing-library/react");
+			const { render: renderComponent } = await import(
+				"@testing-library/react"
+			);
 			const user = userEvent.setup();
 
 			renderComponent(<TestComponent />);
