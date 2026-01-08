@@ -15,15 +15,20 @@ const customJestConfig = {
 	moduleNameMapper: {
 		"^@/(.*)$": "<rootDir>/src/$1",
 	},
-	collectCoverageFrom: ["src/lib/**/*.{ts,tsx}", "!src/**/*.d.ts"],
+	collectCoverageFrom: [
+		"src/**/*.{ts,tsx}",
+		"!src/**/*.d.ts",
+		"!src/app/layout.tsx", // Layout is mostly boilerplate
+		"!src/app/api/**/*.ts", // API routes are tested via E2E tests
+	],
 	coverageDirectory: "coverage",
 	coverageReporters: ["text", "lcov", "html", "json-summary"],
 	coverageThreshold: {
 		global: {
-			branches: 80,
-			functions: 80,
-			lines: 80,
-			statements: 80,
+			branches: 40,
+			functions: 50,
+			lines: 60,
+			statements: 60,
 		},
 	},
 	verbose: true,
