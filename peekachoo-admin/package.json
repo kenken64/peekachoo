@@ -11,7 +11,10 @@
 		"format": "biome format --write .",
 		"test": "jest",
 		"test:watch": "jest --watch",
-		"test:coverage": "jest --coverage"
+		"test:coverage": "jest --coverage",
+		"test:e2e": "playwright test",
+		"test:e2e:ui": "playwright test --ui",
+		"test:e2e:headed": "playwright test --headed"
 	},
 	"dependencies": {
 		"@radix-ui/react-alert-dialog": "^1.1.15",
@@ -30,6 +33,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.3.11",
+		"@playwright/test": "^1.57.0",
 		"@tailwindcss/postcss": "^4",
 		"@testing-library/jest-dom": "^6.4.0",
 		"@testing-library/react": "^16.0.0",
