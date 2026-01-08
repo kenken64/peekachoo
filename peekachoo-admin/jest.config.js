@@ -1,35 +1,32 @@
-const nextJest = require('next/jest');
+const nextJest = require("next/jest");
 
 const createJestConfig = nextJest({
-  // Path to Next.js app
-  dir: './',
+	// Path to Next.js app
+	dir: "./",
 });
 
 /** @type {import('jest').Config} */
 const customJestConfig = {
-  testEnvironment: 'jsdom',
-  roots: ['<rootDir>/src', '<rootDir>/test'],
-  testMatch: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx'],
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
-  setupFilesAfterEnv: ['<rootDir>/test/jest-setup.ts'],
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-  },
-  collectCoverageFrom: [
-    'src/lib/**/*.{ts,tsx}',
-    '!src/**/*.d.ts',
-  ],
-  coverageDirectory: 'coverage',
-  coverageReporters: ['text', 'lcov', 'html', 'json-summary'],
-  coverageThreshold: {
-    global: {
-      branches: 80,
-      functions: 80,
-      lines: 80,
-      statements: 80,
-    },
-  },
-  verbose: true,
+	testEnvironment: "jsdom",
+	roots: ["<rootDir>/src", "<rootDir>/test"],
+	testMatch: ["**/*.spec.ts", "**/*.spec.tsx", "**/*.test.ts", "**/*.test.tsx"],
+	moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
+	setupFilesAfterEnv: ["<rootDir>/test/jest-setup.ts"],
+	moduleNameMapper: {
+		"^@/(.*)$": "<rootDir>/src/$1",
+	},
+	collectCoverageFrom: ["src/lib/**/*.{ts,tsx}", "!src/**/*.d.ts"],
+	coverageDirectory: "coverage",
+	coverageReporters: ["text", "lcov", "html", "json-summary"],
+	coverageThreshold: {
+		global: {
+			branches: 80,
+			functions: 80,
+			lines: 80,
+			statements: 80,
+		},
+	},
+	verbose: true,
 };
 
 module.exports = createJestConfig(customJestConfig);
